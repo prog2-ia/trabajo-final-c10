@@ -2,7 +2,8 @@
 
 #Clase videojuego
 class Juego:
-    def __init__(self, nombre, cod, genero):
+    def __init__(self, nombre, cod, desarrollador, tamaño_equipo):
         self.nombre = nombre
         self.cod = cod
-        self.genero = genero
+        self.desarrollador = desarrollador
+        self.tamaño_equipo = tamaño_equipo
