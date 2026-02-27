@@ -1,5 +1,5 @@
 import juego as j
-
+#
 
 class Moba(j.Juego):
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, num_lineas, tiene_jungla, duracion):

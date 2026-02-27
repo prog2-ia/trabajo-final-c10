@@ -1,5 +1,5 @@
 #Trabajo eSports.py
-
+#
 #Clase videojuego
 class Juego:
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo):
