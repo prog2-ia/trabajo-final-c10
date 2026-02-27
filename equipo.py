@@ -10,3 +10,7 @@ class Equipo:
         #Para el contador de equipos
         type(self).cont_equipos +=1
         self.codigo_equipo = type(self).cont_equipos
+
+    def muestra(self):
+        print(self.ranking)
+        print(self.region)
