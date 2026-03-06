@@ -10,8 +10,8 @@ class Jugador:
         self.apellidos = apellidos
         self.edad = edad
         self.pais = pais
-        self.victorias = 0
-        self.derrotas = 0
+        self.__victorias = 0
+        self.__derrotas = 0
         type(self).cont_jug +=1
         self._codigo_jug = type(self).cont_jug
 
@@ -20,15 +20,15 @@ class Jugador:
         if self.derrotas==0:    #Evitamos dividir entre 0
             return 100
         else:
-            return (self.victorias/self.derrotas)*100
+            return (self.victorias/self.derrotas + self.victorias)*100
 
     #Muestra el winrate
     def ficha_competitiva(self):
         wr=self.winrate()
         if wr>70:
-            self.estatus='favorito'
+            self.__estatus='favorito'
         else:
-            self.estatus='Don Nadie'
+            self.__estatus='Don Nadie'
 
         #Print de la ficha competitiva
         print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.estatus}')
