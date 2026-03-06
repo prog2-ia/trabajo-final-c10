@@ -9,7 +9,7 @@ class Equipo:
         self.juegos = juegos #VA A SER UNA LISTA
         #Para el contador de equipos
         type(self).cont_equipos +=1
-        self.codigo_equipo = type(self).cont_equipos
+        self._codigo_equipo = type(self).cont_equipos
 
     def muestra(self):
         print(self.ranking)

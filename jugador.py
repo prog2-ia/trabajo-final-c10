@@ -13,7 +13,7 @@ class Jugador:
         self.victorias = 0
         self.derrotas = 0
         type(self).cont_jug +=1
-        self.codigo_jug = type(self).cont_jug
+        self._codigo_jug = type(self).cont_jug
 
     #Metodo winrate(proporción victorias-derrotas)
     def winrate(self):
