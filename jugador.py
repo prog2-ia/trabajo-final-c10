@@ -14,13 +14,14 @@ class Jugador:
         self.__derrotas = 0
         type(self).cont_jug +=1
         self._codigo_jug = type(self).cont_jug
+        self.__estatus = 'Don Nadie'
 
     #Metodo winrate(proporción victorias-derrotas)
     def winrate(self):
-        if self.derrotas==0:    #Evitamos dividir entre 0
+        if self.__derrotas==0:    #Evitamos dividir entre 0
             return 100
         else:
-            return (self.victorias/self.derrotas + self.victorias)*100
+            return (self.__victorias/self.__derrotas + self.__victorias)*100
 
     #Muestra el winrate
     def ficha_competitiva(self):
@@ -31,4 +32,4 @@ class Jugador:
             self.__estatus='Don Nadie'
 
         #Print de la ficha competitiva
-        print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.estatus}')
+        print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.__estatus}')
