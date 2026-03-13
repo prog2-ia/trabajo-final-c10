@@ -10,4 +10,3 @@ class BracketEliminacion(b.Bracket):
 
     def avanzar_fase(self):
         self.fase_actual+=1
-        
