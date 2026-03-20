@@ -10,11 +10,11 @@ class Jugador:
         self.apellidos = apellidos
         self.edad = edad
         self.pais = pais
-        self.__victorias = 0
-        self.__derrotas = 0
+        self.__victorias = 0  #Es un dato interno
+        self.__derrotas = 0   #También es un dato interno
         type(self).cont_jug +=1
         self._codigo_jug = type(self).cont_jug
-        self.__estatus = 'Don Nadie'
+        self.__estatus = 'Don Nadie' #Las estadísticas no se pueden modificar
 
     #Metodo winrate(proporción victorias-derrotas)
     def winrate(self):

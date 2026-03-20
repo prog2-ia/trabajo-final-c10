@@ -1,5 +1,6 @@
 #Subclase shooter con herencia de juego
 import juego as j
+
 class Shooter(j.Juego):
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, rondas, dur_rondas, mapas):
         super().__init__(nombre, cod, desarrollador, tamanyo_equipo) #Heredamos del padre

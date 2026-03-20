@@ -1,9 +1,9 @@
 #Trabajo eSports.py
-#
+
 #Clase videojuego
 class Juego:
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo):
         self.nombre = nombre
-        self._cod = cod
+        self._cod = cod #Atributo protegido
         self.desarrollador = desarrollador
         self.tamanyo_equipo = tamanyo_equipo
