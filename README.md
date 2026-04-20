@@ -2,11 +2,17 @@ Sistema de Gestión de Torneos eSports
 Un ecosistema en Python diseñado para gestionar equipos, jugadores y diversas modalidades de torneos (Brackets) para diferentes géneros de videojuegos competitivos. 
 
 · Características Principales
+
     Jerarquía de Videojuegos: Soporte específico para múltiples géneros como MOBA, Shooter, Battle Royale, Lucha y Deportes. 
+    
     Gestión de Competidores: Sistema de perfiles para jugadores con cálculo automático de Winrate y estatus competitivo.
+    
     Sistemas de Torneo (Brackets):
+    
     Eliminación Directa: Formato clásico donde el perdedor queda fuera.
+    
     Doble Eliminación: Incluye un cuadro de perdedores (repesca) para dar una segunda oportunidad.
+
     Round Robin: Formato de "todos contra todos" con tabla de clasificación por puntos.
 
 · Estructura del Proyecto
