@@ -15,7 +15,7 @@ class DobleEliminacion(b.BracketEliminacion):
         equipos = self._equipos.copy()
         fase_g = f.Fase(1)
 
-        #Inicia la primera fase
+        # Inicia la primera fase
         for i in range(0, len(equipos), 2):
             partida = p.Partida(equipos[i], equipos[i + 1])
             fase_g.partidas.append(partida)

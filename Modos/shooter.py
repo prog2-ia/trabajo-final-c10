@@ -3,7 +3,7 @@ from Principal import juego as j
 
 
 class Shooter(j.Juego):
-    def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, rondas, dur_rondas, mapas):
+    def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, rondas: int, dur_rondas: int, mapas: list):
         super().__init__(nombre, cod, desarrollador, tamanyo_equipo) #Heredamos del padre
         self.rondas = rondas
         self.dur_rondas = dur_rondas

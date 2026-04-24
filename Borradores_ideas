@@ -19,3 +19,9 @@ lucha
 moba
 shooter
 ...
+
+
+1. se crea el torneo y se elige de qué ( tipo de modo y eliminacion)
+2. se genera el wr de los jugadores (y por ende el wr de cada equipo) al azar, y se muestra el wr de cada equipo (como si fuese un elo)
+3. se genera el bracket del torneo y se usa probabilidad entre el elo de cada equipo para ver quien pasa de ronda (que se pueda ver a fondo que pasa en cada partida (resultado de rondas, que jugadores han sido mejores (usando el propio wr).
+4. el ganador sube el wr del equipo

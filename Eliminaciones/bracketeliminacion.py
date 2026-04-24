@@ -1,4 +1,4 @@
-#Clase bracket eliminacion-> se divide en directa y doble
+# Clase bracket eliminacion-> se divide en directa y doble
 
 from Principal import bracket as b
 
