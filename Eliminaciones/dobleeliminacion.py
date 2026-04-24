@@ -46,3 +46,4 @@ class DobleEliminacion(b.BracketEliminacion):
         self._bracket_ganadores.append(nueva_fase_g)
         self._bracket_perdedores.append(nueva_fase_p)
 
+

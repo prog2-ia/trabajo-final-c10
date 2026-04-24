@@ -17,3 +17,7 @@ class Resultado:
     #Print del resultado
     def __str__(self):
         return f"{self.__puntos1} - {self.__puntos2}"
+
+
+
+

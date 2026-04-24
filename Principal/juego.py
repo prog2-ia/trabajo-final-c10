@@ -7,3 +7,4 @@ class Juego:
         self._cod = cod #Atributo protegido
         self.desarrollador = desarrollador
         self.tamanyo_equipo = tamanyo_equipo
+
