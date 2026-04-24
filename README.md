@@ -53,6 +53,9 @@ Un ecosistema en Python diseñado para gestionar equipos, jugadores y diversas m
     Jugador: Registro de estadísticas individuales y cálculo de nivel (Favorito vs Don Nadie).
 
 · Instalación y Uso
+    
+    Instalar dependencias. Desde terminal, hhacer: pip install mypy
+
 
   Requisitos: Tener instalado Python
 
