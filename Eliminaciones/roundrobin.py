@@ -1,8 +1,7 @@
 #Round Robin(Todos contra todos)
 
-from bracket import Bracket
-import fase as f
-import partida as p
+from Principal.bracket import Bracket
+from Principal import fase as f, partida as p
 
 
 class RoundRobin(Bracket):

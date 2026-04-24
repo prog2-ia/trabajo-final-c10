@@ -1,8 +1,8 @@
 #Eliminacion directa(si pierdes te eliminas)
 
-import bracketeliminacion as b
-import fase as f
-import partida as p
+from Eliminaciones import bracketeliminacion as b
+from Principal import fase as f, partida as p
+
 
 class EliminacionDirecta(b.BracketEliminacion):
     def generar_bracket(self):

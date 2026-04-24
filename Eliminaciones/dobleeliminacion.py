@@ -1,8 +1,8 @@
 #Doble eliminación(si te eliminas hay 'repesca')
 
-import bracketeliminacion as b
-import fase as f
-import partida as p
+from Eliminaciones import bracketeliminacion as b
+from Principal import fase as f, partida as p
+
 
 class DobleEliminacion(b.BracketEliminacion):
     #Atributos

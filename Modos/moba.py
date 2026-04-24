@@ -1,4 +1,6 @@
-import juego as j
+from Principal import juego as j
+
+
 #
 
 class Moba(j.Juego):

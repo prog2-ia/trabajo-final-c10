@@ -1,6 +1,7 @@
 #Clase bracket eliminacion-> se divide en directa y doble
 
-import bracket as b
+from Principal import bracket as b
+
 
 class BracketEliminacion(b.Bracket):
     def __init__(self,equipos):

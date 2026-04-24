@@ -1,4 +1,6 @@
-import juego as j
+from Principal import juego as j
+
+
 #
 class Lucha(j.Juego):
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, num_luchadores, perspectiva):
