@@ -8,15 +8,15 @@ class RoundRobin(Bracket):
     #Atirbutos
     def __init__(self, equipos):
         super().__init__(equipos)
-        self.__tabla = {}  # equipo -> puntos
+        self.__tabla:dict = {}  # equipo -> puntos
 
     def generar_bracket(self):
         equipos = self._equipos.copy()
 
         # Inicializamos la tabla
         for eq in equipos:
-            self.__tabla[eq] = 0
-        num_fase = 1
+            self.__tabla[eq]:int = 0
+        num_fase:int = 1
 
         # Todos contra todos
         for i in range(len(equipos)):
@@ -32,7 +32,7 @@ class RoundRobin(Bracket):
             for partida in fase.partidas:
                 if partida.resultado is None:
                     continue
-                ganador = partida.resultado.ganador()
+                ganador:int = partida.resultado.ganador()
                 #Asignación de puntos en la tabla
                 if ganador == 1:
                     self.__tabla[partida.equipo1] += 3

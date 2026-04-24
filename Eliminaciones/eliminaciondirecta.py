@@ -7,7 +7,7 @@ from Principal import fase as f, partida as p
 class EliminacionDirecta(b.BracketEliminacion):
     def generar_bracket(self):
         equipos=self._equipos.copy()
-        num_fase=1
+        num_fase:int = 1
         fase=f.Fase(1)
 
         for i in range(0,len(equipos),2 ):
@@ -19,11 +19,11 @@ class EliminacionDirecta(b.BracketEliminacion):
     #Avanzar el torneo
     def siguiente_fase(self):
         fase_actual = self._fases[-1]
-        ganadores = []
+        ganadores:list = []
         for partida in fase_actual.partidas:
             if partida.resultado is None:
                 continue
-            ganador = partida.resultado.ganador()
+            ganador:int = partida.resultado.ganador()
 
             if ganador == 1:
                 ganadores.append(partida.equipo1)

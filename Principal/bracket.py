@@ -3,7 +3,7 @@
 from abc import ABC,abstractmethod
 
 class Bracket(ABC):
-    def __init__(self,equipos):
+    def __init__(self,equipos:list):
         self._equipos=equipos
         self._fases=[]
 

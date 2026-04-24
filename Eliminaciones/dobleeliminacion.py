@@ -8,8 +8,8 @@ class DobleEliminacion(b.BracketEliminacion):
     #Atributos
     def __init__(self, equipos):
         super().__init__(equipos)
-        self._bracket_ganadores = []
-        self._bracket_perdedores = []
+        self._bracket_ganadores:list = []
+        self._bracket_perdedores:list = []
 
     def generar_bracket(self):
         equipos = self._equipos.copy()
@@ -28,14 +28,14 @@ class DobleEliminacion(b.BracketEliminacion):
         nueva_fase_p = f.Fase(fase_actual.numero)
 
         for partida in fase_actual.partidas:
-            ganador = partida.resultado.ganador() #Saca el resultado de la partida
+            ganador:int = partida.resultado.ganador() #Saca el resultado de la partida
 
             if ganador == 1:
-                ganador_eq = partida.equipo1
-                perdedor_eq = partida.equipo2
+                ganador_eq:str = partida.equipo1
+                perdedor_eq:str = partida.equipo2
             else:
-                ganador_eq = partida.equipo2
-                perdedor_eq = partida.equipo1
+                ganador_eq:str = partida.equipo2
+                perdedor_eq:str = partida.equipo1
 
             # Ganador sigue en winners
             nueva_fase_g.partidas.append(p.Partida(ganador_eq, None))
