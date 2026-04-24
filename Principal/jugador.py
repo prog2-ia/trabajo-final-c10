@@ -2,19 +2,19 @@
 
 class Jugador:
     #Atributos de clase:
-    cont_jug = 0 #Contador para ver cuantos jugadores tenemos
+    cont_jug: int = 0 #Contador para ver cuantos jugadores tenemos
     #Atributos de instancia
-    def __init__(self, nick, nombre, apellidos, edad, pais):
+    def __init__(self, nick: str, nombre: str, apellidos: str, edad: int, pais: str):
         self.nick = nick
         self.nombre = nombre
         self.apellidos = apellidos
         self.edad = edad
         self.pais = pais
-        self.__victorias = 0  #Es un dato interno
-        self.__derrotas = 0   #También es un dato interno
+        self.__victorias: int = 0  #Es un dato interno
+        self.__derrotas: int = 0   #También es un dato interno
         type(self).cont_jug +=1
-        self._codigo_jug = type(self).cont_jug
-        self.__estatus = 'Don Nadie' #Las estadísticas no se pueden modificar
+        self._codigo_jug: int|str = type(self).cont_jug
+        self.__estatus: str = 'Don Nadie' #Las estadísticas no se pueden modificar
 
     #Metodo winrate(proporción victorias-derrotas)
     def winrate(self):
@@ -28,9 +28,9 @@ class Jugador:
         wr=self.winrate()
         #Queremos que el WR influya en las probabilidades de ganar de cada equipo
         if wr>70:
-            self.__estatus='favorito'
+            self.__estatus: str='favorito'
         else:
-            self.__estatus='Don Nadie'
+            self.__estatus: str='Don Nadie'
 
         #Print de la ficha competitiva
         print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.__estatus}')

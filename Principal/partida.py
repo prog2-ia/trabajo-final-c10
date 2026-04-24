@@ -5,7 +5,7 @@ import resultado as r
 
 class Partida:
     #Atirbutos
-    def __init__(self, equipo1:str, equipo2.str):
+    def __init__(self, equipo1: str, equipo2: str):
         self._equipo1 = equipo1
         self._equipo2 = equipo2
         self.__resultado:int = None

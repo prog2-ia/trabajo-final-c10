@@ -1,11 +1,11 @@
 #Fase del torneo)
 
 class Fase:
-    def __init__(self, numero):
+    def __init__(self, numero: int):
         self.__numero = numero
-        self.partidas = []
+        self.partidas: list = []
 
-    def agregar_partida(self, partida):
+    def agregar_partida(self, partida: int):
         self.partidas.append(partida)
 
     #Ver si está completa la fase para poder avanzar en la siguiente
