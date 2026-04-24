@@ -5,19 +5,19 @@ import resultado as r
 
 class Partida:
     #Atirbutos
-    def __init__(self, equipo1, equipo2):
+    def __init__(self, equipo1:str, equipo2.str):
         self._equipo1 = equipo1
         self._equipo2 = equipo2
-        self.__resultado = None
+        self.__resultado:int = None
 
     def registrar_resultado(self, puntos1, puntos2):
-        self.resultado = r.Resultado(puntos1, puntos2)
+        self.resultado:int = r.Resultado(puntos1, puntos2)
 
     #Ver quien es el ganador de la partida
     def ganador(self):
         if self.resultado is None:
             return None
-        g = self.resultado.ganador()
+        g:int = self.resultado.ganador()
         if g == 1:
             return self.equipo1
         elif g == 2:

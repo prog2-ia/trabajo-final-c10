@@ -1,7 +1,7 @@
 #Resultado de la partida
 class Resultado:
     #Atributos
-    def __init__(self, puntos1, puntos2):
+    def __init__(self, puntos1:int, puntos2:int):
         self.__puntos1 = puntos1
         self.__puntos2 = puntos2
 
