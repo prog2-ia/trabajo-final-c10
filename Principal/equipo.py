@@ -14,3 +14,4 @@ class Equipo:
     def muestra(self):
         print(self.__ranking)
         print(self.region)
+

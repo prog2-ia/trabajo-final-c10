@@ -14,3 +14,4 @@ class Bracket(ABC):
     def mostrar_bracket(self):
         for r in self._fases:
             r.mostrar_partidos() #Llamada a la clase fase
+

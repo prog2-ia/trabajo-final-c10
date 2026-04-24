@@ -35,3 +35,4 @@ class Jugador:
         #Print de la ficha competitiva
         print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.__estatus}')
 
+

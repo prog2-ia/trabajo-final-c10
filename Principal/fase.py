@@ -19,3 +19,4 @@ class Fase:
         print(f"Fase {self.__numero}")
         for p in self.partidas:
             print(p)
+

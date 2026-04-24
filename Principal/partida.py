@@ -32,3 +32,4 @@ class Partida:
         else:
             return f"{self._equipo1.nombre} vs {self._equipo2.nombre} (sin jugar)"
 
+
