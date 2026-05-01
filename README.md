@@ -80,4 +80,4 @@ Un ecosistema en Python diseñado para gestionar equipos, jugadores y diversas m
 ## Authors
 
 - [@jorgesancere](https://www.github.com/jorgesancere); Jorge Sánchez Cerezo
-- [@javierrs007-web](https://github.com/javierrs007-web); Javier
+- [@javierrs007-web](https://github.com/javierrs007-web); Javier Rifé Sánchez
