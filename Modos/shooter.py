@@ -1,10 +1,11 @@
-#Subclase shooter con herencia de juego
-from Principal import juego as j
+from Principal.juego import Juego
 
+class Shooter(Juego):
+    def __init__(self, nombre, cod, desarrollador, tamanyo_equipo):
+        super().__init__(nombre, cod, desarrollador, tamanyo_equipo)
 
-class Shooter(j.Juego):
-    def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, rondas: int, dur_rondas: int, mapas: list):
-        super().__init__(nombre, cod, desarrollador, tamanyo_equipo) #Heredamos del padre
-        self.rondas = rondas
-        self.dur_rondas = dur_rondas
-        self.mapas = mapas
+    def formatos_validos(self) -> list:
+        return ['eliminacion_directa', 'doble_eliminacion', 'round_robin']
+
+    def permite_empate(self) -> bool:
+        return False
