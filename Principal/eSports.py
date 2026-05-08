@@ -1,6 +1,7 @@
 #Trabajo eSports.py
 #Archivo para ejecutar
 
+#importamos los errores que vienen del archivo errores.py
 from errores import OpcionInvalidaError, EntradaVaciaError
 
 def descrip_modos():
