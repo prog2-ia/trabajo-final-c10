@@ -3,7 +3,7 @@
 
 #importamos los errores que vienen del archivo errores.py
 from errores import OpcionInvalidaError, EntradaVaciaError
-
+#blablabla
 def descrip_modos():
     print("\n DESCRIPCIÓN DE GÉNEROS eSPORTS\n")
 
