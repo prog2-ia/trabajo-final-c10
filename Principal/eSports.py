@@ -12,7 +12,9 @@ from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
 
-
+'''
+Error de elegir opcion mal
+'''
 def menu_juego():
     print("\nElija el género del juego para su torneo:")
     print("1.- Battle Royale")
@@ -82,7 +84,9 @@ def menu_formato(formatos_validos: list) -> str:
 
     return formatos_validos[int(answ) - 1]
 
-
+'''
+Error de verificar tamaño equipos
+'''
 def crear_equipos(tamanyo_equipo: int) -> list:
     equipos = []
     num = int(input("\n¿Cuántos equipos participan? "))
