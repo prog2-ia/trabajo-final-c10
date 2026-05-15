@@ -149,7 +149,7 @@ def pedir_resultado(partida):
 # ─────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────
-#
+
 if __name__ == "__main__":
     print("===== GENERADOR DE TORNEOS eSPORTS =====")
 
