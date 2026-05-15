@@ -12,9 +12,7 @@ from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
 
-'''
-Error de elegir opcion mal
-'''
+
 def menu_juego():
     print("\nElija el género del juego para su torneo:")
     print("1.- Battle Royale")
@@ -84,9 +82,7 @@ def menu_formato(formatos_validos: list) -> str:
 
     return formatos_validos[int(answ) - 1]
 
-'''
-Error de verificar tamaño equipos
-'''
+
 def crear_equipos(tamanyo_equipo: int) -> list:
     equipos = []
     num = int(input("\n¿Cuántos equipos participan? "))
@@ -113,6 +109,42 @@ def crear_bracket(formato: str, equipos: list):
     elif formato == 'round_robin':
         return RoundRobin(equipos)
 
+def nombre_ronda(num_fase: int, total_equipos: int, formato: str) -> str:
+    # Devuelve el nombre legible de la ronda según la fase y el total de equipos
+    if formato == 'round_robin':
+        return f"Jornada {num_fase}"
+
+    partidas_en_fase = total_equipos // (2 ** num_fase)
+    nombres = {
+        1:  "Final",
+        2:  "Semifinal",
+        4:  "Cuartos de Final",
+        8:  "Round of 16",
+        16: "Round of 32",
+    }
+    return nombres.get(partidas_en_fase, f"Ronda {num_fase}")
+
+
+def mostrar_enfrentamiento(partida, num_fase: int, total_equipos: int, formato: str):
+    # Muestra un enfrentamiento con el nombre de la ronda
+    ronda = nombre_ronda(num_fase, total_equipos, formato)
+    print(f"\n  [{ronda}] {partida.equipo1.nombre} vs {partida.equipo2.nombre}")
+
+
+def pedir_resultado(partida):
+    print(f"  Introduce el resultado:")
+
+    """ Controlar que la entrada sea un número entero y no texto """
+    puntos1 = int(input(f"    Puntos {partida.equipo1.nombre}: "))
+
+    """ Controlar que la entrada sea un número entero y no texto """
+    puntos2 = int(input(f"    Puntos {partida.equipo2.nombre}: "))
+
+    """ Controlar empate si el juego no lo permite """
+    partida.registrar_resultado(puntos1, puntos2)
+    ganador = partida.ganador()
+    print(f"  Ganador: {ganador.nombre}")
+
 
 # ─────────────────────────────────────────
 # MAIN
@@ -121,25 +153,104 @@ def crear_bracket(formato: str, equipos: list):
 if __name__ == "__main__":
     print("===== GENERADOR DE TORNEOS eSPORTS =====")
 
-    # 1. Elegir género → instancia el objeto Juego concreto
+    """ Controlar opción de menú inválida (no numérica o fuera de rango) """
     juego = menu_juego()
     print(f"\nJuego seleccionado: {juego}")
 
-    # 2. El juego expone sus formatos válidos → el usuario elige entre ellos
+    """ Controlar opción de formato inválida """
     formato = menu_formato(juego.formatos_validos())
 
-    # 3. Crear equipos respetando el tamaño que impone el juego
+    """ Controlar que el número de equipos sea un entero y suficiente para el formato """
+    """ Controlar que el número de equipos sea par en eliminación directa """
     equipos = crear_equipos(juego.tamanyo_equipo)
 
-    # 4. Instanciar el bracket según el formato elegido
+    """ Controlar que el tamaño del equipo coincida con el que impone el juego """
     bracket = crear_bracket(formato, equipos)
 
-    # 5. Nombrar y crear el torneo (composición: Torneo tiene un Juego y un Bracket)
+    """ Controlar nombre vacío """
     nombre_torneo = input("\nNombre del torneo: ")
     torneo = Torneo(nombre_torneo, juego, bracket)
 
-    # 6. Iniciar: el bracket genera las fases y partidas iniciales
     torneo.iniciar()
-
-    # 7. Mostrar el estado inicial del torneo
     torneo.mostrar_estado()
+
+    total_equipos = len(equipos)
+
+    # ─────────────────────────────────────────
+    # BUCLE PRINCIPAL DE EJECUCIÓN DEL TORNEO
+    # ─────────────────────────────────────────
+
+    torneo_activo = True
+
+    while torneo_activo:
+
+        fase_actual = torneo.bracket._fases[-1]
+
+        # Filtramos las partidas que aún no tienen resultado
+        partidas_pendientes = [p for p in fase_actual.partidas if p.resultado is None]
+
+        if not partidas_pendientes:
+            # Fase completada — intentamos generar la siguiente
+
+            if formato == 'round_robin':
+                # En round robin no hay fases siguientes, el torneo termina
+                torneo_activo = False
+                continue
+
+            ganadores = [p.ganador() for p in fase_actual.partidas]
+
+            # Si solo queda un ganador el torneo ha terminado
+            if len(ganadores) == 1:
+                torneo_activo = False
+                continue
+
+            # Generamos la siguiente fase con los ganadores
+            from Principal.fase import Fase
+            from Principal.partida import Partida
+
+            nueva_fase = Fase(fase_actual.numero + 1)
+            for i in range(0, len(ganadores), 2):
+                """ Controlar índice impar (número de ganadores impar) """
+                if i + 1 < len(ganadores):
+                    nueva_fase.partidas.append(Partida(ganadores[i], ganadores[i + 1]))
+
+            torneo.bracket._fases.append(nueva_fase)
+            print(f"\n{'='*45}")
+            print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase.numero, total_equipos, formato)}")
+            print(f"{'='*45}")
+            continue
+
+        # Jugamos la siguiente partida pendiente
+        partida = partidas_pendientes[0]
+        mostrar_enfrentamiento(partida, fase_actual.numero, total_equipos, formato)
+
+        """ Controlar puntuaciones negativas """
+        """ Controlar empate si el juego no permite_empate() """
+        pedir_resultado(partida)
+
+        # Tras cada partida preguntamos si quiere ver el estado del torneo
+        ver_estado = input("\n  ¿Ver estado del torneo? (s/n): ").strip().lower()
+        if ver_estado == 's':
+            torneo.mostrar_estado()
+
+    # ─────────────────────────────────────────
+    # FIN DEL TORNEO
+    # ─────────────────────────────────────────
+
+    print(f"\n{'='*45}")
+    print("         TORNEO FINALIZADO")
+    print(f"{'='*45}")
+
+    if formato == 'round_robin':
+        # En round robin mostramos la clasificación final
+        """ Controlar que bracket sea instancia de RoundRobin antes de llamar a actualizar_tabla """
+        torneo.bracket.actualizar_tabla()
+        torneo.bracket.mostrar_clasificacion()
+    else:
+        # En eliminación directa hay un único ganador al final
+        ultima_fase = torneo.bracket._fases[-1]
+        """ Controlar que la última fase tenga exactamente una partida con resultado """
+        campeon = ultima_fase.partidas[0].ganador()
+        print(f"\n  CAMPEÓN: {campeon.nombre}")
+
+    print(f"{'='*45}\n")
