@@ -1,17 +1,23 @@
-#Aqui se manejarán todos los errores del trabajo.
+#errores.py
+#Aquí tenemos todos los errores posibles, no se importa de ningun sitio
 
-#-----------ERRORES QUE VAN A eSPORTS------------
-#ERROR1. Opcion inválida
-class OpcionInvalidaError(Exception):
-    #Excepción lanzada cuando el usuario elige una opción fuera del menú (1-6).
-    def __init__(self, valor):
-        self.valor = valor
-        super().__init__(f"La opción '{valor}' no es válida.")
-#ERROR2. Entrada vacía
-class EntradaVaciaError(Exception):
-    #Excepción lanzada si el usuario pulsa Enter sin escribir nada.
-    def __init__(self):
-        super().__init__("No has introducido ningún valor.")
-#---------------------------------------------------
+# #manejo_errores.py se encarga de resolverlos
 
-#meteremos más...
+
+#En primer lugar, creamos una clase TorneoError, y a partir de ahi, todas las subclases de todos los errores.
+class TorneoError(Exception):
+    '''La clase base de errores'''
+    pass
+class OpcionInvalidaError(TorneoError):
+    """Se lanza cuando el usuario elige una opción inexistente en los menús."""
+    #Numero fuera del rango...
+    pass
+
+class EquiposInsuficientesError(TorneoError):
+    """Se lanza cuando el número de equipos no alcanza el mínimo del formato."""
+    #si num equipos menor del requerido, ERROR
+    pass
+
+class RegistroJugadorError(TorneoError):
+    """Errores relacionados con la creación o validación de jugadores."""
+    pass

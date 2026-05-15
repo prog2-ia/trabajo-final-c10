@@ -3,6 +3,12 @@
 - pickle
 
 ----------------------------
+LOGICA ERRORES:
+- En eSports: try except -> errores (te dice de que va el error)
+- Manejo_errores se encarga de revisar el error, y manda los mensajes de error
+
+
+
 
 LOGICA
 │
