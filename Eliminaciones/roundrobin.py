@@ -10,7 +10,7 @@ class RoundRobin(Bracket):
         super().__init__(equipos)
         self.__tabla:dict = {}  # equipo -> puntos
 
-    def generar_bracket(self):
+    def gen_bracket(self):
         equipos = self._equipos.copy()
 
         # Inicializamos la tabla

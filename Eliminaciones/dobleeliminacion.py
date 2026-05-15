@@ -1,49 +1,45 @@
 #Doble eliminación(si te eliminas hay 'repesca')
 
-from Eliminaciones import bracketeliminacion as b
-from Principal import fase as f, partida as p
+from Eliminaciones.bracketeliminacion import BracketEliminacion
+from Principal.fase import Fase
+from Principal.partida import Partida
 
-
-class DobleEliminacion(b.BracketEliminacion):
-    #Atributos
+class DobleEliminacion(BracketEliminacion):
     def __init__(self, equipos):
         super().__init__(equipos)
-        self._bracket_ganadores:list = []
-        self._bracket_perdedores:list = []
+        self._bracket_ganadores = []
+        self._bracket_perdedores = []
 
-    def generar_bracket(self):
+    def gen_bracket(self):
         equipos = self._equipos.copy()
-        fase_g = f.Fase(1)
+        fase_g = Fase(1)
 
-        # Inicia la primera fase
         for i in range(0, len(equipos), 2):
-            partida = p.Partida(equipos[i], equipos[i + 1])
+            partida = Partida(equipos[i], equipos[i + 1])
             fase_g.partidas.append(partida)
 
         self._bracket_ganadores.append(fase_g)
+        self._fases.append(fase_g)
 
     def procesar_fase(self):
         fase_actual = self._bracket_ganadores[-1]
-        nueva_fase_g = f.Fase(fase_actual.numero + 1)
-        nueva_fase_p = f.Fase(fase_actual.numero)
+        nueva_fase_g = Fase(fase_actual.numero + 1)
+        nueva_fase_p = Fase(fase_actual.numero)
 
         for partida in fase_actual.partidas:
-            ganador:int = partida.resultado.ganador() #Saca el resultado de la partida
-
+            ganador = partida.resultado.ganador()
             if ganador == 1:
-                ganador_eq:str = partida.equipo1
-                perdedor_eq:str = partida.equipo2
+                ganador_eq = partida.equipo1
+                perdedor_eq = partida.equipo2
             else:
-                ganador_eq:str = partida.equipo2
-                perdedor_eq:str = partida.equipo1
+                ganador_eq = partida.equipo2
+                perdedor_eq = partida.equipo1
 
-            # Ganador sigue en winners
-            nueva_fase_g.partidas.append(p.Partida(ganador_eq, None))
-
-            # Perdedor baja a losers
-            nueva_fase_p.partidas.append(p.Partida(perdedor_eq, None))
+            nueva_fase_g.partidas.append(Partida(ganador_eq, None))
+            nueva_fase_p.partidas.append(Partida(perdedor_eq, None))
 
         self._bracket_ganadores.append(nueva_fase_g)
         self._bracket_perdedores.append(nueva_fase_p)
+        self._fases.append(nueva_fase_g)
 
 
