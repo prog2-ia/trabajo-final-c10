@@ -1,27 +1,41 @@
-Vamos a tener:
+- Torneo fases
+- Torneo ganador
+- pickle
 
+----------------------------
 
-Bracket
-Fases
-Partida
-Resultado (partida) - depende del wr de los jugadores
-
----------------
-Equipo
-Jugador - WR que dependa en las probabilidades de ganar de cada equipo
-
--------------
-
-Juegos:
-battleroyale
-deportes
-lucha
-moba
-shooter
-...
-
-
-1. se crea el torneo y se elige de qué ( tipo de modo y eliminacion)
-2. se genera el wr de los jugadores (y por ende el wr de cada equipo) al azar, y se muestra el wr de cada equipo (como si fuese un elo)
-3. se genera el bracket del torneo y se usa probabilidad entre el elo de cada equipo para ver quien pasa de ronda (que se pueda ver a fondo que pasa en cada partida (resultado de rondas, que jugadores han sido mejores (usando el propio wr).
-4. el ganador sube el wr del equipo
+LOGICA
+│
+├─ menu_juego()
+│   └─ El usuario elige género 1-5
+│   └─ Se instancia el objeto concreto: Moba(...), Shooter(...), etc.
+│   └─ RETORNA un objeto Juego (polimorfismo: el tipo exacto varía)
+│
+├─ menu_formato(juego.formatos_validos())
+│   └─ juego.formatos_validos() devuelve solo los formatos válidos para ese género
+│   └─ El usuario elige entre esas opciones (no entre todas)
+│   └─ RETORNA un string: 'eliminacion_directa' | 'doble_eliminacion' | 'round_robin'
+│
+├─ crear_equipos(juego.tamanyo_equipo)
+│   └─ juego.tamanyo_equipo indica cuántos jugadores debe tener cada equipo
+│   └─ El usuario introduce N equipos, cada uno con exactamente tamanyo_equipo jugadores
+│   └─ Se crean objetos Equipo y Jugador
+│   └─ RETORNA lista de objetos Equipo
+│
+├─ crear_bracket(formato, equipos)
+│   └─ Según el string de formato, instancia EliminacionDirecta, DobleEliminacion o RoundRobin
+│   └─ RETORNA un objeto Bracket (polimorfismo)
+│
+├─ Torneo(nombre, juego, bracket)
+│   └─ Composición: el Torneo guarda referencia al Juego y al Bracket
+│
+├─ torneo.iniciar()
+│   └─ Llama a bracket.gen_bracket()
+│   └─ El bracket genera las fases y partidas iniciales
+│
+└─ torneo.mostrar_estado()
+    └─ Muestra nombre del torneo, juego, formato
+    └─ Llama a bracket.mostrar_bracket()
+        └─ Itera sobre self._fases
+            └─ Cada fase llama a fase.mostrar_partidas()
+                └─ Cada partida imprime su __str__
