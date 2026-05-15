@@ -37,4 +37,4 @@ class EliminacionDirecta(b.BracketEliminacion):
                 nueva_partida = p.Partida(ganadores[i], ganadores[i+1])
                 nueva_fase.partidas.append(nueva_partida)
 
-        self.fases.append(nueva_fase)
+        self._fases.append(nueva_fase)
