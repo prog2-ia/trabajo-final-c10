@@ -1,83 +1,116 @@
+# 🎮 Gestor de Torneos eSports
 
-   Gestion de Torneos eSports
+Sistema de gestión de torneos competitivos desarrollado en Python como proyecto universitario de **Programación Orientada a Objetos**. Permite organizar torneos completos para distintos géneros de videojuegos, con soporte para múltiples formatos de bracket y generación automática de equipos.
 
-Un ecosistema en Python diseñado para gestionar equipos, jugadores y diversas modalidades de torneos (Brackets) para diferentes géneros de videojuegos competitivos. 
+---
 
-· Características Principales
+## 📋 Características
 
-    Jerarquía de Videojuegos: Soporte específico para múltiples géneros como MOBA, Shooter, Battle Royale, Lucha y Deportes. 
-    
-    Gestión de Competidores: Sistema de perfiles para jugadores con cálculo automático de Winrate y estatus competitivo.
-    
-    Sistemas de Torneo (Brackets):
-    
-    Eliminación Directa: Formato clásico donde el perdedor queda fuera.
-    
-    Doble Eliminación: Incluye un cuadro de perdedores (repesca) para dar una segunda oportunidad.
+- 🕹️ **5 géneros de videojuego** — Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
+- 🏆 **3 formatos de torneo** — Eliminación Directa, Doble Eliminación y Round Robin
+- 👥 **Creación de equipos** manual o aleatoria desde una base de datos de jugadores y equipos reales de eSports
+- 📊 **Seguimiento en tiempo real** del torneo con nombres de ronda automáticos (Final, Semifinal, Round of 16...)
+- 🔒 **Arquitectura OO completa** — herencia, clases abstractas, encapsulación y composición
 
-    Round Robin: Formato de "todos contra todos" con tabla de clasificación por puntos.
+---
 
-· Estructura del Proyecto
+## 🗂️ Estructura del Proyecto
 
-    El proyecto sigue un modelo de Programación Orientada a Objetos (POO) con herencia y clases abstractas:
+```
+trabajo-final-c10/
+│
+├── Principal/
+│   ├── eSports.py              # Punto de entrada y bucle principal
+│   ├── torneo.py               # Clase Torneo (composición central)
+│   ├── juego.py                # Clase abstracta Juego
+│   ├── bracket.py              # Clase abstracta Bracket
+│   ├── fase.py                 # Fases del torneo
+│   ├── partida.py              # Enfrentamiento entre dos equipos
+│   ├── resultado.py            # Lógica de puntos y ganador
+│   ├── equipo.py               # Clase Equipo
+│   ├── jugador.py              # Clase Jugador con winrate
+│   ├── generador_aleatorio.py  # Generación aleatoria desde ficheros .pickle
+│   ├── crear_ficheros.py       # Script de inicialización de la base de datos
+│   ├── jugadores.pickle        # Base de datos de jugadores eSports
+│   ├── equipos.pickle          # Base de datos de equipos eSports
+│   ├── errores.py              # Excepciones personalizadas
+│   └── manejo_errores.py       # Manejador centralizado de errores
+│
+├── Modos/
+│   ├── battleroyale.py
+│   ├── moba.py
+│   ├── shooter.py
+│   ├── lucha.py
+│   └── deportes.py
+│
+└── Eliminaciones/
+    ├── bracketeliminacion.py
+    ├── eliminaciondirecta.py
+    ├── dobleeliminacion.py
+    └── roundrobin.py
+```
 
-· Núcleo de Juegos
+---
 
-    La clase base Juego es extendida por clases especializadas que añaden atributos propios de cada género:
-    
-    Shooter: Control de rondas y mapas.
-    
-    Moba: Gestión de líneas, jungla y duración.
-    
-    BattleRoyale: Número de jugadores y mapas.
-    
-    Deportes/Lucha: Atributos técnicos como duración de partida o perspectiva (2D/3D).
-    
+## ⚙️ Instalación
 
-· Sistema de Competición
+**Requisitos:** Python 3.10 o superior
 
-    El motor de torneos se organiza en una jerarquía lógica:
+```bash
+# 1. Clona el repositorio
+git clone https://github.com/jorgesancere/trabajo-final-c10.git
+cd trabajo-final-c10
 
-    Bracket (Abstracta): Define la estructura base para cualquier torneo.
+# 2. (Solo la primera vez) Genera los ficheros de la base de datos
+python Principal/crear_ficheros.py
 
-    Fase: Contenedor de partidas que verifica si se puede avanzar a la siguiente etapa.
+# 3. Ejecuta el programa
+python Principal/eSports.py
+```
 
-    Partida: Gestiona el enfrentamiento entre dos equipos y su resultado.
-    
-    Resultado: Lógica interna para determinar ganadores basándose en puntos.
+> Los ficheros `jugadores.pickle` y `equipos.pickle` ya están incluidos en el repositorio, por lo que el paso 2 solo es necesario si los eliminas o quieres regenerarlos.
 
-· Entidades
+---
 
-    Equipo: Agrupación de jugadores con ranking y región.
+## 🚀 Flujo de uso
 
-    Jugador: Registro de estadísticas individuales y cálculo de nivel (Favorito vs Don Nadie).
+```
+1. Elige el género del juego
+        ↓
+2. Elige el formato de torneo (según los que admite ese género)
+        ↓
+3. Indica cuántos equipos participan
+        ↓
+4. Crea los equipos manualmente o genéralos de forma aleatoria
+        ↓
+5. El torneo arranca — se muestran los enfrentamientos ronda a ronda
+        ↓
+6. Introduce los resultados de cada partida
+        ↓
+7. Al final de cada partida puedes consultar el estado del torneo
+        ↓
+8. El torneo termina mostrando el campeón o la clasificación final
+```
 
-· Instalación y Uso
-    
-    Instalar dependencias. Desde terminal, hhacer: pip install mypy
+---
 
+## 🧱 Conceptos de POO aplicados
 
-  Requisitos: Tener instalado Python
+| Concepto | Dónde se aplica |
+|---|---|
+| **Herencia** | `Moba`, `Shooter`... heredan de `Juego`; `EliminacionDirecta`... heredan de `Bracket` |
+| **Clases abstractas** | `Juego` y `Bracket` usan `ABC` con métodos abstractos |
+| **Encapsulación** | Atributos `__privados` y `_protegidos` con `@property` |
+| **Composición** | `Torneo` contiene un `Juego` y un `Bracket` |
+| **Polimorfismo** | Cada subclase de `Juego` devuelve sus propios `formatos_validos()` |
+| **Modularización** | Código dividido en 3 carpetas y más de 15 archivos |
 
-    Ejecución: El punto de entrada principal es el archivo eSports.py.
+---
 
-    Bash
+## 👨‍💻 Autores
 
-    python eSports.py
+- **Jorge Sánchez Cerezo** — [@jorgesancere](https://github.com/jorgesancere)
+- **Javier Rifé Sánchez** — [@javierrs007-web](https://github.com/javierrs007-web)
 
-· Detalles Técnicos
-
-    Encapsulamiento: Uso de atributos privados (e.g., __puntos en Resultado) y protegidos para asegurar la integridad de los datos.
-
-    Abstracción: Implementación de ABC en la clase Bracket para obligar a definir el método gen_bracket en cada tipo de torneo.
-    
-    Validaciones: El sistema verifica si todas las partidas de una fase han terminado antes de permitir el avance del torneo.
-
-
-(README temporal).
-
-
-## Authors
-
-- [@jorgesancere](https://www.github.com/jorgesancere); Jorge Sánchez Cerezo
-- [@javierrs007-web](https://github.com/javierrs007-web); Javier Rifé Sánchez
+*Proyecto de Programación II — Grado en Ingeniería en Inteligencia Artificial, Universidad de Alicante*
+```
