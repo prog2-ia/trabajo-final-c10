@@ -1,10 +1,10 @@
-# 🎮 Gestor de Torneos eSports
+# Gestor de Torneos eSports
 
 Sistema de gestión de torneos competitivos desarrollado en Python como proyecto universitario de **Programación Orientada a Objetos**. Permite organizar torneos completos para distintos géneros de videojuegos, con soporte para múltiples formatos de bracket y generación automática de equipos.
 
 ---
 
-## 📋 Características
+## Características
 
 -  **5 géneros de videojuego** — Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
 -  **3 formatos de torneo** — Eliminación Directa, Doble Eliminación y Round Robin
@@ -13,7 +13,7 @@ Sistema de gestión de torneos competitivos desarrollado en Python como proyecto
 
 ---
 
-## 🗂️ Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 trabajo-final-c10/
@@ -51,7 +51,7 @@ trabajo-final-c10/
 
 ---
 
-## ⚙️ Instalación
+## Instalación
 
 **Requisitos:** Python 3.10 o superior
 
@@ -71,7 +71,7 @@ python Principal/eSports.py
 
 ---
 
-## 🚀 Flujo de uso
+## Flujo de uso
 
 ```
 1. Elige el género del juego
@@ -90,9 +90,9 @@ python Principal/eSports.py
         ↓
 8. El torneo termina mostrando el campeón o la clasificación final
 ```
-## 👨‍💻 Autores
+## Autores
 
 - **Jorge Sánchez Cerezo** — [@jorgesancere](https://github.com/jorgesancere)
-- **Javier Rifé Sánchez** — [@javierrs007-web](https://github.com/javierrs007-web)
+- **Javier Rifé Sánchez** — [@javierrife](https://github.com/javierrife)
 
 *Proyecto de Programación II — Grado en Ingeniería en Inteligencia Artificial, Universidad de Alicante*
