@@ -6,11 +6,10 @@ Sistema de gestión de torneos competitivos desarrollado en Python como proyecto
 
 ## 📋 Características
 
-- 🕹️ **5 géneros de videojuego** — Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
-- 🏆 **3 formatos de torneo** — Eliminación Directa, Doble Eliminación y Round Robin
-- 👥 **Creación de equipos** manual o aleatoria desde una base de datos de jugadores y equipos reales de eSports
-- 📊 **Seguimiento en tiempo real** del torneo con nombres de ronda automáticos (Final, Semifinal, Round of 16...)
-- 🔒 **Arquitectura OO completa** — herencia, clases abstractas, encapsulación y composición
+-  **5 géneros de videojuego** — Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
+-  **3 formatos de torneo** — Eliminación Directa, Doble Eliminación y Round Robin
+-  **Creación de equipos** manual o aleatoria desde una base de datos de jugadores y equipos reales de eSports
+-  **Seguimiento en tiempo real** del torneo con nombres de ronda automáticos (Final, Semifinal, Round of 16...)
 
 ---
 
@@ -91,26 +90,9 @@ python Principal/eSports.py
         ↓
 8. El torneo termina mostrando el campeón o la clasificación final
 ```
-
----
-
-## 🧱 Conceptos de POO aplicados
-
-| Concepto | Dónde se aplica |
-|---|---|
-| **Herencia** | `Moba`, `Shooter`... heredan de `Juego`; `EliminacionDirecta`... heredan de `Bracket` |
-| **Clases abstractas** | `Juego` y `Bracket` usan `ABC` con métodos abstractos |
-| **Encapsulación** | Atributos `__privados` y `_protegidos` con `@property` |
-| **Composición** | `Torneo` contiene un `Juego` y un `Bracket` |
-| **Polimorfismo** | Cada subclase de `Juego` devuelve sus propios `formatos_validos()` |
-| **Modularización** | Código dividido en 3 carpetas y más de 15 archivos |
-
----
-
 ## 👨‍💻 Autores
 
 - **Jorge Sánchez Cerezo** — [@jorgesancere](https://github.com/jorgesancere)
 - **Javier Rifé Sánchez** — [@javierrs007-web](https://github.com/javierrs007-web)
 
 *Proyecto de Programación II — Grado en Ingeniería en Inteligencia Artificial, Universidad de Alicante*
-```
