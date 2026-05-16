@@ -11,6 +11,7 @@ from Modos.shooter import Shooter
 from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
+from Principal.generador_aleatorio import GeneradorAleatorio
 
 
 def menu_juego():
@@ -84,21 +85,44 @@ def menu_formato(formatos_validos: list) -> str:
 
 
 def crear_equipos(tamanyo_equipo: int) -> list:
-    equipos = []
+
+    """ Controlar que el número de equipos sea un entero y no texto """
     num = int(input("\n¿Cuántos equipos participan? "))
 
-    for i in range(num):
-        nombre_eq = input(f"\nNombre del equipo {i + 1}: ")
-        region = input("Región: ")
-        jugadores = []
-        print(f"  Introduce {tamanyo_equipo} jugador(es):")
-        for j in range(tamanyo_equipo):
-            nick = input(f"  Nick jugador {j + 1}: ")
-            jugadores.append(Jugador(nick, nick, "", 18, "Desconocido"))
-        eq = Equipo(nombre_eq, region, i + 1, jugadores)
-        equipos.append(eq)
+    print("\n¿Cómo quieres crear los equipos?")
+    print("1.- Introducirlos manualmente")
+    print("2.- Generarlos aleatoriamente")
 
-    return equipos
+    """ Controlar opción inválida en el menú de creación de equipos """
+    opcion = input("Elige una opción: ").strip()
+    while opcion not in ['1', '2']:
+        print("Opción no válida.")
+        opcion = input("Elige una opción: ").strip()
+
+    if opcion == '1':
+        # Introducción manual
+        equipos = []
+        for i in range(num):
+            nombre_eq = input(f"\nNombre del equipo {i + 1}: ")
+            region = input("Región: ")
+            jugadores = []
+            print(f"  Introduce {tamanyo_equipo} jugador(es):")
+            for j in range(tamanyo_equipo):
+                nick = input(f"  Nick jugador {j + 1}: ")
+                jugadores.append(Jugador(nick, nick, "", 18, "Desconocido"))
+            equipos.append(Equipo(nombre_eq, region, i + 1, jugadores))
+        return equipos
+
+    else:
+        # Generación aleatoria
+        generador = GeneradorAleatorio(num, tamanyo_equipo)
+        equipos = generador.generar()
+        print("\nEquipos generados:")
+        for eq in equipos:
+            print(f"  {eq.nombre} ({eq.region})")
+            for j in eq.juegos:
+                print(f"    - {j.nick}")
+        return equipos
 
 
 def crear_bracket(formato: str, equipos: list):
@@ -143,7 +167,20 @@ def pedir_resultado(partida):
     """ Controlar empate si el juego no lo permite """
     partida.registrar_resultado(puntos1, puntos2)
     ganador = partida.ganador()
-    print(f"  Ganador: {ganador.nombre}")
+
+    if ganador is None:
+        # PROVISIONAL — borrar cuando el control de excepciones esté implementado
+        # En su lugar, el manejador de errores debe impedir el empate si el juego no lo permite
+        import random
+        ganador_provisional = random.choice([partida.equipo1, partida.equipo2])
+        print(f"  Empate detectado. Ganador aleatorio provisional: {ganador_provisional.nombre}")
+        # PROVISIONAL — se fuerza el resultado para que no pete la siguiente fase
+        if ganador_provisional == partida.equipo1:
+            partida.registrar_resultado(puntos1 + 1, puntos2)
+        else:
+            partida.registrar_resultado(puntos1, puntos2 + 1)
+    else:
+        print(f"  Ganador: {ganador.nombre}")
 
 
 # ─────────────────────────────────────────

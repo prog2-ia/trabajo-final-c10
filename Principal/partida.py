@@ -1,35 +1,40 @@
 #Partida del torneo
-
-import resultado as r
-
+from Principal.resultado import Resultado
 
 class Partida:
-    #Atirbutos
-    def __init__(self, equipo1: str, equipo2: str):
+    def __init__(self, equipo1, equipo2):
         self._equipo1 = equipo1
         self._equipo2 = equipo2
-        self.__resultado:int = None
+        self._resultado = None
 
-    def registrar_resultado(self, puntos1, puntos2):
-        self.resultado:int = r.Resultado(puntos1, puntos2)
+    @property
+    def equipo1(self):
+        return self._equipo1
 
-    #Ver quien es el ganador de la partida
+    @property
+    def equipo2(self):
+        return self._equipo2
+
+    @property
+    def resultado(self):
+        return self._resultado
+
+    def registrar_resultado(self, puntos1: int, puntos2: int):
+        self._resultado = Resultado(puntos1, puntos2)
+
     def ganador(self):
-        if self.resultado is None:
+        if self._resultado is None:
             return None
-        g:int = self.resultado.ganador()
+        g = self._resultado.ganador()
         if g == 1:
-            return self.equipo1
+            return self._equipo1
         elif g == 2:
-            return self.equipo2
+            return self._equipo2
         else:
             return None
 
-    #Print quien juega contra quien
     def __str__(self):
-        if self.resultado:
-            return f"{self._equipo1.nombre} vs {self._equipo2.nombre} -> {self.resultado}"
+        if self._resultado:
+            return f"{self._equipo1.nombre} vs {self._equipo2.nombre} -> {self._resultado}"
         else:
             return f"{self._equipo1.nombre} vs {self._equipo2.nombre} (sin jugar)"
-
-

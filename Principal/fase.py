@@ -5,10 +5,13 @@ class Fase:
         self.__numero = numero
         self.partidas: list = []
 
-    def agregar_partida(self, partida: int):
+    @property
+    def numero(self):
+        return self.__numero
+
+    def agregar_partida(self, partida):
         self.partidas.append(partida)
 
-    #Ver si está completa la fase para poder avanzar en la siguiente
     def esta_completa(self):
         for p in self.partidas:
             if p.resultado is None:
@@ -16,7 +19,7 @@ class Fase:
         return True
 
     def mostrar_partidas(self):
-        print(f"Fase {self.__numero}")
+        print(f"--- Fase {self.__numero} ---")
         for p in self.partidas:
-            print(p)
+            print(" ", p)
 
