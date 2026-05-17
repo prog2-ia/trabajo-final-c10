@@ -12,6 +12,18 @@ class Equipo:
         self._codigo_equipo: int = type(self).cont_equipos #Atributo protegido
 
     def muestra(self):
-        print(self.__ranking)
-        print(self.region)
+        print(f"Ranking: {self.__ranking} | Región: {self.region}")
+
+    def __str__(self):
+        return f"{self.nombre} (Ranking: {self.__ranking} | Región: {self.region})"
+
+    def __eq__(self, otro):
+        # Dos equipos son iguales si tienen el mismo nombre
+        if not isinstance(otro, Equipo):
+            return False
+        return self.nombre == otro.nombre
+
+    def __lt__(self, otro):
+        # Permite ordenar equipos por ranking (menor ranking = mejor posición)
+        return self.__ranking < otro.__ranking
 

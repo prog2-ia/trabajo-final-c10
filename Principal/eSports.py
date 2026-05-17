@@ -12,11 +12,13 @@ from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
 from Principal.generador_aleatorio import GeneradorAleatorio
+from Principal.fase import Fase
+from Principal.partida import Partida
 
 from Principal.errores import OpcionInvalidaError
 from Principal.errores import EquiposInsuficientesError
 from Principal.errores import EquiposImpares
-from Principal.errores import TamanioEquipoError
+from Principal.errores import TamanoEquipoError
 from Principal.errores import NombreVacioError
 from Principal.errores import PuntuacionNegativaError
 from Principal.errores import EmpateNoPermitidoError
@@ -106,7 +108,7 @@ def menu_formato(formatos_validos: list) -> str:
 
 def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
 
-    """ Controlar que el número de equipos sea un entero y no texto """
+    # Controlar que el número de equipos sea un entero y no texto
     while True:
         try:
             num = int(input("\n¿Cuántos equipos participan? "))
@@ -114,7 +116,7 @@ def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
             registrar_error(e)
             continue
 
-        """ Controlar número de equipos insuficiente para el formato """
+        # Controlar número de equipos insuficiente para el formato
         try:
             if num < MIN_EQUIPOS_FORMATO.get(formato, 2):
                 raise EquiposInsuficientesError(
@@ -123,7 +125,7 @@ def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
             registrar_error(e)
             continue
 
-        """ Controlar número de equipos impar en eliminación directa """
+        # Controlar número de equipos impar en eliminación directa
         try:
             if formato == 'eliminacion_directa' and num % 2 != 0:
                 raise EquiposImpares(
@@ -138,7 +140,7 @@ def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
     print("1.- Introducirlos manualmente")
     print("2.- Generarlos aleatoriamente")
 
-    """ Controlar opción inválida en el menú de creación de equipos """
+    # Controlar opción inválida en el menú de creación de equipos
     opcion = input("Elige una opción: ").strip()
     while opcion not in ['1', '2']:
         try:
@@ -159,14 +161,6 @@ def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
                 nick = input(f"  Nick jugador {j + 1}: ")
                 jugadores.append(Jugador(nick, nick, "", 18, "Desconocido"))
             equipos.append(Equipo(nombre_eq, region, i + 1, jugadores))
-
-            """ Controlar tamaño del equipo no coincide con el que impone el juego """
-            try:
-                if len(jugadores) != tamanyo_equipo:
-                    raise TamanioEquipoError(
-                        f"El equipo '{nombre_eq}' tiene {len(jugadores)} jugador(es), pero el juego requiere {tamanyo_equipo}.")
-            except TamanioEquipoError as e:
-                registrar_error(e)
         return equipos
 
     else:
@@ -189,12 +183,13 @@ def crear_bracket(formato: str, equipos: list):
     elif formato == 'round_robin':
         return RoundRobin(equipos)
 
-def nombre_ronda(num_fase: int, total_equipos: int, formato: str) -> str:
-    # Devuelve el nombre legible de la ronda según la fase y el total de equipos
-    if formato == 'round_robin':
-        return f"Jornada {num_fase}"
 
-    partidas_en_fase = total_equipos // (2 ** num_fase)
+def nombre_ronda(fase_actual, formato: str) -> str:
+    # Devuelve el nombre legible de la ronda según las partidas reales de la fase
+    if formato == 'round_robin':
+        return f"Jornada {fase_actual.numero}"
+
+    num_partidas = len(fase_actual.partidas)
     nombres = {
         1:  "Final",
         2:  "Semifinal",
@@ -202,19 +197,19 @@ def nombre_ronda(num_fase: int, total_equipos: int, formato: str) -> str:
         8:  "Round of 16",
         16: "Round of 32",
     }
-    return nombres.get(partidas_en_fase, f"Ronda {num_fase}")
+    return nombres.get(num_partidas, f"Ronda {fase_actual.numero}")
 
 
-def mostrar_enfrentamiento(partida, num_fase: int, total_equipos: int, formato: str):
+def mostrar_enfrentamiento(partida, fase_actual, formato: str):
     # Muestra un enfrentamiento con el nombre de la ronda
-    ronda = nombre_ronda(num_fase, total_equipos, formato)
+    ronda = nombre_ronda(fase_actual, formato)
     print(f"\n  [{ronda}] {partida.equipo1.nombre} vs {partida.equipo2.nombre}")
 
 
 def pedir_resultado(partida, juego):
     print(f"  Introduce el resultado:")
 
-    """ Controlar que la entrada sea un número entero y no texto """
+    # Controlar que la entrada sea un número entero y no texto
     while True:
         try:
             puntos1 = int(input(f"    Puntos {partida.equipo1.nombre}: "))
@@ -224,7 +219,7 @@ def pedir_resultado(partida, juego):
         except (ValueError, PuntuacionNegativaError) as e:
             registrar_error(e)
 
-    """ Controlar que la entrada sea un número entero y no texto """
+    # Controlar que la entrada sea un número entero y no texto
     while True:
         try:
             puntos2 = int(input(f"    Puntos {partida.equipo2.nombre}: "))
@@ -234,7 +229,7 @@ def pedir_resultado(partida, juego):
         except (ValueError, PuntuacionNegativaError) as e:
             registrar_error(e)
 
-    """ Controlar empate si el juego no lo permite """
+    # Controlar empate si el juego no lo permite
     while puntos1 == puntos2 and not juego.permite_empate():
         try:
             raise EmpateNoPermitidoError(f"El juego '{juego.nombre}' no permite empates. Introduce un resultado sin empate.")
@@ -269,21 +264,20 @@ def pedir_resultado(partida, juego):
 if __name__ == "__main__":
     print("===== GENERADOR DE TORNEOS eSPORTS =====")
 
-    """ Controlar opción de menú inválida (no numérica o fuera de rango) """
+    # Controlar opción de menú inválida (no numérica o fuera de rango)
     juego = menu_juego()
     print(f"\nJuego seleccionado: {juego}")
 
-    """ Controlar opción de formato inválida """
+    # Controlar opción de formato inválida
     formato = menu_formato(juego.formatos_validos())
 
-    """ Controlar que el número de equipos sea un entero y suficiente para el formato """
-    """ Controlar que el número de equipos sea par en eliminación directa """
+    # Controlar que el número de equipos sea un entero y suficiente para el formato
+    # Controlar que el número de equipos sea par en eliminación directa
     equipos = crear_equipos(juego.tamanyo_equipo, formato)
 
-    """ Controlar que el tamaño del equipo coincida con el que impone el juego """
     bracket = crear_bracket(formato, equipos)
 
-    """ Controlar nombre vacío """
+    # Controlar nombre vacío
     while True:
         nombre_torneo = input("\nNombre del torneo: ").strip()
         try:
@@ -296,8 +290,6 @@ if __name__ == "__main__":
 
     torneo.iniciar()
     torneo.mostrar_estado()
-
-    total_equipos = len(equipos)
 
     # ─────────────────────────────────────────
     # BUCLE PRINCIPAL DE EJECUCIÓN DEL TORNEO
@@ -320,6 +312,15 @@ if __name__ == "__main__":
                 torneo_activo = False
                 continue
 
+            if formato == 'doble_eliminacion':
+                # Delegamos en el bracket de doble eliminación para procesar la siguiente fase
+                torneo.bracket.procesar_fase()
+                nueva_fase = torneo.bracket._fases[-1]
+                print(f"\n{'='*45}")
+                print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
+                print(f"{'='*45}")
+                continue
+
             ganadores = [p.ganador() for p in fase_actual.partidas]
 
             # Si solo queda un ganador el torneo ha terminado
@@ -328,12 +329,9 @@ if __name__ == "__main__":
                 continue
 
             # Generamos la siguiente fase con los ganadores
-            from Principal.fase import Fase
-            from Principal.partida import Partida
-
             nueva_fase = Fase(fase_actual.numero + 1)
             for i in range(0, len(ganadores), 2):
-                """ Controlar índice impar (número de ganadores impar) """
+                # Controlar índice impar (número de ganadores impar)
                 try:
                     if i + 1 >= len(ganadores):
                         raise IndiceImparError(
@@ -344,16 +342,16 @@ if __name__ == "__main__":
 
             torneo.bracket._fases.append(nueva_fase)
             print(f"\n{'='*45}")
-            print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase.numero, total_equipos, formato)}")
+            print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
             print(f"{'='*45}")
             continue
 
         # Jugamos la siguiente partida pendiente
         partida = partidas_pendientes[0]
-        mostrar_enfrentamiento(partida, fase_actual.numero, total_equipos, formato)
+        mostrar_enfrentamiento(partida, fase_actual, formato)
 
-        """ Controlar puntuaciones negativas """
-        """ Controlar empate si el juego no permite_empate() """
+        # Controlar puntuaciones negativas
+        # Controlar empate si el juego no permite_empate()
         pedir_resultado(partida, juego)
 
         # Tras cada partida preguntamos si quiere ver el estado del torneo
@@ -371,7 +369,7 @@ if __name__ == "__main__":
 
     if formato == 'round_robin':
         # En round robin mostramos la clasificación final
-        """ Controlar que bracket sea instancia de RoundRobin antes de llamar a actualizar_tabla """
+        # Controlar que bracket sea instancia de RoundRobin antes de llamar a actualizar_tabla
         try:
             if not isinstance(torneo.bracket, RoundRobin):
                 raise BracketTipoError(
@@ -381,9 +379,9 @@ if __name__ == "__main__":
         except BracketTipoError as e:
             registrar_error(e)
     else:
-        # En eliminación directa hay un único ganador al final
+        # En eliminación directa y doble eliminación hay un único ganador al final
         ultima_fase = torneo.bracket._fases[-1]
-        """ Controlar que la última fase tenga exactamente una partida con resultado """
+        # Controlar que la última fase tenga exactamente una partida con resultado
         try:
             if len(ultima_fase.partidas) != 1 or ultima_fase.partidas[0].resultado is None:
                 raise FaseFinInvalidaError(

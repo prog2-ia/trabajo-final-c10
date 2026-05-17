@@ -9,7 +9,7 @@ class Juego(ABC):
 
     @abstractmethod
     def formatos_validos(self) -> list:
-        #evuelve los formatos de bracket válidos para este género.
+        #Devuelve los formatos de bracket válidos para este género.
         pass
 
     @abstractmethod

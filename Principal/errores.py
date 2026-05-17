@@ -26,7 +26,7 @@ class EquiposImpares(TorneoError):
     """Se lanza cuando se requieren equipos pares y el número es impar."""
     pass
 
-class TamanioEquipoError(TorneoError):
+class TamanoEquipoError(TorneoError):
     """Se lanza cuando el tamaño del equipo no coincide con el que impone el juego."""
     pass
 

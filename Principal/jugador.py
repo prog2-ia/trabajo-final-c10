@@ -28,9 +28,9 @@ class Jugador:
         wr=self.winrate()
         #Queremos que el WR influya en las probabilidades de ganar de cada equipo
         if wr>70:
-            self.__estatus: str='favorito'
+            self.__estatus = 'favorito'
         else:
-            self.__estatus: str='Don Nadie'
+            self.__estatus = 'Don Nadie'
 
         #Print de la ficha competitiva
         print(f'EL jugador {self.nick}, con un winrate del {wr}% se le considera un {self.__estatus}')

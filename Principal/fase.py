@@ -23,3 +23,7 @@ class Fase:
         for p in self.partidas:
             print(" ", p)
 
+    def __len__(self):
+        # Devuelve el número de partidas de la fase
+        return len(self.partidas)
+
