@@ -13,6 +13,20 @@ from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
 from Principal.generador_aleatorio import GeneradorAleatorio
 
+from Principal.errores import OpcionInvalidaError
+from Principal.errores import EquiposInsuficientesError
+from Principal.errores import EquiposImpares
+from Principal.errores import TamanioEquipoError
+from Principal.errores import NombreVacioError
+from Principal.errores import PuntuacionNegativaError
+from Principal.errores import EmpateNoPermitidoError
+from Principal.errores import IndiceImparError
+from Principal.errores import BracketTipoError
+from Principal.errores import FaseFinInvalidaError
+from Principal.manejo_errores import registrar_error
+
+MIN_EQUIPOS_FORMATO = {'eliminacion_directa': 2, 'doble_eliminacion': 4, 'round_robin': 2}
+
 
 def menu_juego():
     print("\nElija el género del juego para su torneo:")
@@ -30,7 +44,10 @@ def menu_juego():
         if answ == '6':
             descrip_modos()
         else:
-            print("Opción no válida.")
+            try:
+                raise OpcionInvalidaError(f"'{answ}' no es una opción válida. Elija un número del 1 al 5.")
+            except OpcionInvalidaError as e:
+                registrar_error(e)
         answ = input("Introduzca su opción: ")
 
     if answ == '1':
@@ -78,16 +95,44 @@ def menu_formato(formatos_validos: list) -> str:
     opciones = [str(i) for i in range(1, len(formatos_validos) + 1)]
     answ = input("Elija el formato: ")
     while answ not in opciones:
-        print("Opción no válida.")
+        try:
+            raise OpcionInvalidaError(f"'{answ}' no es una opción válida. Elija un número del 1 al {len(formatos_validos)}.")
+        except OpcionInvalidaError as e:
+            registrar_error(e)
         answ = input("Elija el formato: ")
 
     return formatos_validos[int(answ) - 1]
 
 
-def crear_equipos(tamanyo_equipo: int) -> list:
+def crear_equipos(tamanyo_equipo: int, formato: str) -> list:
 
     """ Controlar que el número de equipos sea un entero y no texto """
-    num = int(input("\n¿Cuántos equipos participan? "))
+    while True:
+        try:
+            num = int(input("\n¿Cuántos equipos participan? "))
+        except ValueError as e:
+            registrar_error(e)
+            continue
+
+        """ Controlar número de equipos insuficiente para el formato """
+        try:
+            if num < MIN_EQUIPOS_FORMATO.get(formato, 2):
+                raise EquiposInsuficientesError(
+                    f"El formato '{formato}' requiere al menos {MIN_EQUIPOS_FORMATO.get(formato, 2)} equipos. Se introdujeron {num}.")
+        except EquiposInsuficientesError as e:
+            registrar_error(e)
+            continue
+
+        """ Controlar número de equipos impar en eliminación directa """
+        try:
+            if formato == 'eliminacion_directa' and num % 2 != 0:
+                raise EquiposImpares(
+                    f"La eliminación directa requiere un número par de equipos. Se introdujeron {num}.")
+        except EquiposImpares as e:
+            registrar_error(e)
+            continue
+
+        break
 
     print("\n¿Cómo quieres crear los equipos?")
     print("1.- Introducirlos manualmente")
@@ -96,7 +141,10 @@ def crear_equipos(tamanyo_equipo: int) -> list:
     """ Controlar opción inválida en el menú de creación de equipos """
     opcion = input("Elige una opción: ").strip()
     while opcion not in ['1', '2']:
-        print("Opción no válida.")
+        try:
+            raise OpcionInvalidaError(f"'{opcion}' no es una opción válida. Introduzca 1 o 2.")
+        except OpcionInvalidaError as e:
+            registrar_error(e)
         opcion = input("Elige una opción: ").strip()
 
     if opcion == '1':
@@ -111,6 +159,14 @@ def crear_equipos(tamanyo_equipo: int) -> list:
                 nick = input(f"  Nick jugador {j + 1}: ")
                 jugadores.append(Jugador(nick, nick, "", 18, "Desconocido"))
             equipos.append(Equipo(nombre_eq, region, i + 1, jugadores))
+
+            """ Controlar tamaño del equipo no coincide con el que impone el juego """
+            try:
+                if len(jugadores) != tamanyo_equipo:
+                    raise TamanioEquipoError(
+                        f"El equipo '{nombre_eq}' tiene {len(jugadores)} jugador(es), pero el juego requiere {tamanyo_equipo}.")
+            except TamanioEquipoError as e:
+                registrar_error(e)
         return equipos
 
     else:
@@ -155,30 +211,53 @@ def mostrar_enfrentamiento(partida, num_fase: int, total_equipos: int, formato: 
     print(f"\n  [{ronda}] {partida.equipo1.nombre} vs {partida.equipo2.nombre}")
 
 
-def pedir_resultado(partida):
+def pedir_resultado(partida, juego):
     print(f"  Introduce el resultado:")
 
     """ Controlar que la entrada sea un número entero y no texto """
-    puntos1 = int(input(f"    Puntos {partida.equipo1.nombre}: "))
+    while True:
+        try:
+            puntos1 = int(input(f"    Puntos {partida.equipo1.nombre}: "))
+            if puntos1 < 0:
+                raise PuntuacionNegativaError(f"La puntuación no puede ser negativa ({puntos1}).")
+            break
+        except (ValueError, PuntuacionNegativaError) as e:
+            registrar_error(e)
 
     """ Controlar que la entrada sea un número entero y no texto """
-    puntos2 = int(input(f"    Puntos {partida.equipo2.nombre}: "))
+    while True:
+        try:
+            puntos2 = int(input(f"    Puntos {partida.equipo2.nombre}: "))
+            if puntos2 < 0:
+                raise PuntuacionNegativaError(f"La puntuación no puede ser negativa ({puntos2}).")
+            break
+        except (ValueError, PuntuacionNegativaError) as e:
+            registrar_error(e)
 
     """ Controlar empate si el juego no lo permite """
+    while puntos1 == puntos2 and not juego.permite_empate():
+        try:
+            raise EmpateNoPermitidoError(f"El juego '{juego.nombre}' no permite empates. Introduce un resultado sin empate.")
+        except EmpateNoPermitidoError as e:
+            registrar_error(e)
+        while True:
+            try:
+                puntos1 = int(input(f"    Puntos {partida.equipo1.nombre}: "))
+                break
+            except ValueError as e:
+                registrar_error(e)
+        while True:
+            try:
+                puntos2 = int(input(f"    Puntos {partida.equipo2.nombre}: "))
+                break
+            except ValueError as e:
+                registrar_error(e)
+
     partida.registrar_resultado(puntos1, puntos2)
     ganador = partida.ganador()
 
     if ganador is None:
-        # PROVISIONAL — borrar cuando el control de excepciones esté implementado
-        # En su lugar, el manejador de errores debe impedir el empate si el juego no lo permite
-        import random
-        ganador_provisional = random.choice([partida.equipo1, partida.equipo2])
-        print(f"  Empate detectado. Ganador aleatorio provisional: {ganador_provisional.nombre}")
-        # PROVISIONAL — se fuerza el resultado para que no pete la siguiente fase
-        if ganador_provisional == partida.equipo1:
-            partida.registrar_resultado(puntos1 + 1, puntos2)
-        else:
-            partida.registrar_resultado(puntos1, puntos2 + 1)
+        print("  Empate registrado.")
     else:
         print(f"  Ganador: {ganador.nombre}")
 
@@ -199,13 +278,20 @@ if __name__ == "__main__":
 
     """ Controlar que el número de equipos sea un entero y suficiente para el formato """
     """ Controlar que el número de equipos sea par en eliminación directa """
-    equipos = crear_equipos(juego.tamanyo_equipo)
+    equipos = crear_equipos(juego.tamanyo_equipo, formato)
 
     """ Controlar que el tamaño del equipo coincida con el que impone el juego """
     bracket = crear_bracket(formato, equipos)
 
     """ Controlar nombre vacío """
-    nombre_torneo = input("\nNombre del torneo: ")
+    while True:
+        nombre_torneo = input("\nNombre del torneo: ").strip()
+        try:
+            if not nombre_torneo:
+                raise NombreVacioError("El nombre del torneo no puede estar vacío.")
+            break
+        except NombreVacioError as e:
+            registrar_error(e)
     torneo = Torneo(nombre_torneo, juego, bracket)
 
     torneo.iniciar()
@@ -248,8 +334,13 @@ if __name__ == "__main__":
             nueva_fase = Fase(fase_actual.numero + 1)
             for i in range(0, len(ganadores), 2):
                 """ Controlar índice impar (número de ganadores impar) """
-                if i + 1 < len(ganadores):
+                try:
+                    if i + 1 >= len(ganadores):
+                        raise IndiceImparError(
+                            f"Número de ganadores impar ({len(ganadores)}). No se puede emparejar el equipo '{ganadores[i].nombre}'.")
                     nueva_fase.partidas.append(Partida(ganadores[i], ganadores[i + 1]))
+                except IndiceImparError as e:
+                    registrar_error(e)
 
             torneo.bracket._fases.append(nueva_fase)
             print(f"\n{'='*45}")
@@ -263,7 +354,7 @@ if __name__ == "__main__":
 
         """ Controlar puntuaciones negativas """
         """ Controlar empate si el juego no permite_empate() """
-        pedir_resultado(partida)
+        pedir_resultado(partida, juego)
 
         # Tras cada partida preguntamos si quiere ver el estado del torneo
         ver_estado = input("\n  ¿Ver estado del torneo? (s/n): ").strip().lower()
@@ -281,13 +372,25 @@ if __name__ == "__main__":
     if formato == 'round_robin':
         # En round robin mostramos la clasificación final
         """ Controlar que bracket sea instancia de RoundRobin antes de llamar a actualizar_tabla """
-        torneo.bracket.actualizar_tabla()
-        torneo.bracket.mostrar_clasificacion()
+        try:
+            if not isinstance(torneo.bracket, RoundRobin):
+                raise BracketTipoError(
+                    f"Se esperaba RoundRobin pero se encontró {type(torneo.bracket).__name__}.")
+            torneo.bracket.actualizar_tabla()
+            torneo.bracket.mostrar_clasificacion()
+        except BracketTipoError as e:
+            registrar_error(e)
     else:
         # En eliminación directa hay un único ganador al final
         ultima_fase = torneo.bracket._fases[-1]
         """ Controlar que la última fase tenga exactamente una partida con resultado """
-        campeon = ultima_fase.partidas[0].ganador()
-        print(f"\n  CAMPEÓN: {campeon.nombre}")
+        try:
+            if len(ultima_fase.partidas) != 1 or ultima_fase.partidas[0].resultado is None:
+                raise FaseFinInvalidaError(
+                    f"La fase final debería tener exactamente 1 partida con resultado.")
+            campeon = ultima_fase.partidas[0].ganador()
+            print(f"\n  CAMPEÓN: {campeon.nombre}")
+        except FaseFinInvalidaError as e:
+            registrar_error(e)
 
     print(f"{'='*45}\n")

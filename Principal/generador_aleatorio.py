@@ -3,6 +3,8 @@ import pickle
 import random
 from Principal.equipo import Equipo
 from Principal.jugador import Jugador
+from Principal.errores import JugadoresInsuficientesError, EquiposInsuficientesError
+from Principal.manejo_errores import registrar_error
 
 
 class GeneradorAleatorio:
@@ -39,6 +41,23 @@ class GeneradorAleatorio:
         self.__equipos_disponibles = equipos_raw
 
     def generar(self) -> list:
+        try:
+            if len(self.__equipos_disponibles) < self.__num_equipos:
+                raise EquiposInsuficientesError(
+                    f"El fichero solo contiene {len(self.__equipos_disponibles)} equipo(s), pero se necesitan {self.__num_equipos}.")
+        except EquiposInsuficientesError as e:
+            registrar_error(e)
+            raise
+
+        jugadores_necesarios = self.__num_equipos * self.__tamanyo_equipo
+        try:
+            if len(self.__jugadores_disponibles) < jugadores_necesarios:
+                raise JugadoresInsuficientesError(
+                    f"El fichero solo contiene {len(self.__jugadores_disponibles)} jugador(es), pero se necesitan {jugadores_necesarios}.")
+        except JugadoresInsuficientesError as e:
+            registrar_error(e)
+            raise
+
         equipos_seleccionados = random.sample(self.__equipos_disponibles, self.__num_equipos)
 
         for i, (nombre_eq, region) in enumerate(equipos_seleccionados):
