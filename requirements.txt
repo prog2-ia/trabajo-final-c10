@@ -1,0 +1,7 @@
+# Este proyecto no tiene dependencias externas.
+# Usa únicamente módulos de la librería estándar de Python:
+#   - pickle (serialización de ficheros)
+#   - random (generación aleatoria de equipos)
+#   - abc    (clases abstractas)
+
+# Versión mínima requerida: Python 3.10
