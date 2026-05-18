@@ -1,10 +1,12 @@
-#Archivo para leer ficheros binarios como base de datos de jugadores y equipos. Asigna equipos aleatoriamente.
 import pickle
 import random
-from Principal.equipo import Equipo
-from Principal.jugador import Jugador
-from Principal.errores import JugadoresInsuficientesError, EquiposInsuficientesError
-from Principal.manejo_errores import registrar_error
+import os
+from Principal.Entidades.equipo import Equipo
+from Principal.Entidades.jugador import Jugador
+from Principal.Errores.errores import JugadoresInsuficientesError, EquiposInsuficientesError
+from Principal.Errores.manejo_errores import registrar_error
+
+BASE_DIR = os.path.dirname(__file__)
 
 
 class GeneradorAleatorio:
@@ -17,14 +19,13 @@ class GeneradorAleatorio:
 
         self.__cargar_datos()
 
-
-    def __cargar_datos(self):   #Metodo privado para que no se pueda cargar datos desde otro lado
-        # Cargamos la base de datos de jugadores
-        with open('jugadores.pickle', 'rb') as f:
+    def __cargar_datos(self):
+        # Cargamos la base de datos de jugadores desde el fichero binario
+        with open(os.path.join(BASE_DIR, 'jugadores.pickle'), 'rb') as f:
             jugadores_raw = pickle.load(f)
 
-        # Cargamos la base de datos de equipos
-        with open('equipos.pickle', 'rb') as f:
+        # Cargamos la base de datos de equipos desde el fichero binario
+        with open(os.path.join(BASE_DIR, 'equipos.pickle'), 'rb') as f:
             equipos_raw = pickle.load(f)
 
         # Mezclamos aleatoriamente ambas listas para mayor variedad
@@ -37,31 +38,33 @@ class GeneradorAleatorio:
                 Jugador(nick, nombre, apellidos, edad, pais)
             )
 
-        # Guardamos los equipos como tuplas (nombre, region)
         self.__equipos_disponibles = equipos_raw
 
     def generar(self) -> list:
-        try:
-            if len(self.__equipos_disponibles) < self.__num_equipos:
-                raise EquiposInsuficientesError(
-                    f"El fichero solo contiene {len(self.__equipos_disponibles)} equipo(s), pero se necesitan {self.__num_equipos}.")
-        except EquiposInsuficientesError as e:
-            registrar_error(e)
-            raise
-
         jugadores_necesarios = self.__num_equipos * self.__tamanyo_equipo
+
+        # Controlar que haya suficientes jugadores en el fichero para cubrir todos los equipos
+        # Controlar que haya suficientes equipos en el fichero
         try:
             if len(self.__jugadores_disponibles) < jugadores_necesarios:
                 raise JugadoresInsuficientesError(
-                    f"El fichero solo contiene {len(self.__jugadores_disponibles)} jugador(es), pero se necesitan {jugadores_necesarios}.")
-        except JugadoresInsuficientesError as e:
+                    f"Se necesitan {jugadores_necesarios} jugadores pero solo hay "
+                    f"{len(self.__jugadores_disponibles)} en la base de datos."
+                )
+            if len(self.__equipos_disponibles) < self.__num_equipos:
+                raise EquiposInsuficientesError(
+                    f"Se necesitan {self.__num_equipos} equipos pero solo hay "
+                    f"{len(self.__equipos_disponibles)} en la base de datos."
+                )
+        except (JugadoresInsuficientesError, EquiposInsuficientesError) as e:
             registrar_error(e)
-            raise
+            return []
 
+        # Seleccionamos aleatoriamente los equipos necesarios sin repetir
         equipos_seleccionados = random.sample(self.__equipos_disponibles, self.__num_equipos)
 
         for i, (nombre_eq, region) in enumerate(equipos_seleccionados):
-            # Cogemos los jugadores necesarios sin repetir. Los eliminamos de disponibles
+            # Cogemos los jugadores necesarios sin repetir — los eliminamos de disponibles
             jugadores_equipo = self.__jugadores_disponibles[:self.__tamanyo_equipo]
             self.__jugadores_disponibles = self.__jugadores_disponibles[self.__tamanyo_equipo:]
 

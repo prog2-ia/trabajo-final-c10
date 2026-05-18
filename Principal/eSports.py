@@ -1,8 +1,8 @@
 # Archivo principal de ejecución
 
-from Principal.torneo import Torneo
-from Principal.equipo import Equipo
-from Principal.jugador import Jugador
+from Principal.Entidades.torneo import Torneo
+from Principal.Entidades.equipo import Equipo
+from Principal.Entidades.jugador import Jugador
 from Modos.battleroyale import BattleRoyale
 from Modos.moba import Moba
 from Modos.lucha import Lucha
@@ -11,21 +11,20 @@ from Modos.shooter import Shooter
 from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
-from Principal.generador_aleatorio import GeneradorAleatorio
-from Principal.fase import Fase
-from Principal.partida import Partida
+from Principal.Datos.generador_aleatorio import GeneradorAleatorio
+from Principal.Entidades.fase import Fase
+from Principal.Entidades.partida import Partida
 
-from Principal.errores import OpcionInvalidaError
-from Principal.errores import EquiposInsuficientesError
-from Principal.errores import EquiposImpares
-from Principal.errores import TamanoEquipoError
-from Principal.errores import NombreVacioError
-from Principal.errores import PuntuacionNegativaError
-from Principal.errores import EmpateNoPermitidoError
-from Principal.errores import IndiceImparError
-from Principal.errores import BracketTipoError
-from Principal.errores import FaseFinInvalidaError
-from Principal.manejo_errores import registrar_error
+from Principal.Errores.errores import OpcionInvalidaError
+from Principal.Errores.errores import EquiposInsuficientesError
+from Principal.Errores.errores import EquiposImpares
+from Principal.Errores.errores import NombreVacioError
+from Principal.Errores.errores import PuntuacionNegativaError
+from Principal.Errores.errores import EmpateNoPermitidoError
+from Principal.Errores.errores import IndiceImparError
+from Principal.Errores.errores import BracketTipoError
+from Principal.Errores.errores import FaseFinInvalidaError
+from Principal.Errores.manejo_errores import registrar_error
 
 MIN_EQUIPOS_FORMATO = {'eliminacion_directa': 2, 'doble_eliminacion': 4, 'round_robin': 2}
 
@@ -313,19 +312,66 @@ if __name__ == "__main__":
                 continue
 
             if formato == 'doble_eliminacion':
-                # Delegamos en el bracket de doble eliminación para procesar la siguiente fase
+                # Si la última fase es la gran final y está completa, el torneo termina
+                if fase_actual.esta_completa() and len(fase_actual.partidas) == 1:
+                    torneo_activo = False
+                    continue
+
+                # Comprobamos si todas las fases activas están completas antes de procesar
+                fases_incompletas = [f for f in torneo.bracket._fases if not f.esta_completa()]
+                if fases_incompletas:
+                    fase_actual = fases_incompletas[0]
+                    partidas_pendientes = [p for p in fase_actual.partidas if p.resultado is None]
+                    partida = partidas_pendientes[0]
+                    mostrar_enfrentamiento(partida, fase_actual, formato)
+                    pedir_resultado(partida, juego)
+                    ver_estado = input("\n  ¿Ver estado del torneo? (s/n): ").strip().lower()
+                    if ver_estado == 's':
+                        torneo.mostrar_estado()
+                    continue
+
+                # Todas las fases completas — procesamos la siguiente
                 torneo.bracket.procesar_fase()
+
                 nueva_fase = torneo.bracket._fases[-1]
-                print(f"\n{'='*45}")
-                print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
-                print(f"{'='*45}")
+                if len(nueva_fase.partidas) == 1:
+                    print(f"\n{'=' * 45}")
+                    print(f"  GRAN FINAL")
+                    print(f"{'=' * 45}")
+                else:
+                    print(f"\n{'=' * 45}")
+                    print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
+                    print(f"{'=' * 45}")
+                continue
+
+                # Todas las fases activas están completas — procesamos la siguiente
+                torneo.bracket.procesar_fase()
+
+                # Comprobamos si la última fase generada es la gran final (1 sola partida)
+                nueva_fase = torneo.bracket._fases[-1]
+                if len(nueva_fase.partidas) == 1 and nueva_fase.partidas[0].equipo1 and nueva_fase.partidas[0].equipo2:
+                    print(f"\n{'=' * 45}")
+                    print(f"  GRAN FINAL")
+                    print(f"{'=' * 45}")
+                else:
+                    print(f"\n{'=' * 45}")
+                    print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
+                    print(f"{'=' * 45}")
                 continue
 
             ganadores = [p.ganador() for p in fase_actual.partidas]
 
             # Si solo queda un ganador el torneo ha terminado
             if len(ganadores) == 1:
-                torneo_activo = False
+                if formato == 'doble_eliminacion':
+                    # En doble eliminación hay que procesar la gran final primero
+                    torneo.bracket.procesar_fase()
+                    nueva_fase = torneo.bracket._fases[-1]
+                    print(f"\n{'=' * 45}")
+                    print(f"  GRAN FINAL")
+                    print(f"{'=' * 45}")
+                else:
+                    torneo_activo = False
                 continue
 
             # Generamos la siguiente fase con los ganadores

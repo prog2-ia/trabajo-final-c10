@@ -1,8 +1,8 @@
 # Eliminacion directa: si pierdes quedas eliminado
 
 from Eliminaciones.bracketeliminacion import BracketEliminacion
-from Principal.fase import Fase
-from Principal.partida import Partida
+from Principal.Entidades.fase import Fase
+from Principal.Entidades.partida import Partida
 
 
 class EliminacionDirecta(BracketEliminacion):

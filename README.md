@@ -18,35 +18,41 @@ Sistema de gestión de torneos competitivos desarrollado en Python como proyecto
 ```
 trabajo-final-c10/
 │
-├── Principal/
-│   ├── eSports.py              # Punto de entrada y bucle principal
-│   ├── torneo.py               # Clase Torneo (composición central)
-│   ├── juego.py                # Clase abstracta Juego
-│   ├── bracket.py              # Clase abstracta Bracket
-│   ├── fase.py                 # Fases del torneo
-│   ├── partida.py              # Enfrentamiento entre dos equipos
-│   ├── resultado.py            # Lógica de puntos y ganador
-│   ├── equipo.py               # Clase Equipo
-│   ├── jugador.py              # Clase Jugador con winrate
-│   ├── generador_aleatorio.py  # Generación aleatoria desde ficheros .pickle
-│   ├── crear_ficheros.py       # Script de inicialización de la base de datos
-│   ├── jugadores.pickle        # Base de datos de jugadores eSports
-│   ├── equipos.pickle          # Base de datos de equipos eSports
-│   ├── errores.py              # Excepciones personalizadas
-│   └── manejo_errores.py       # Manejador centralizado de errores
-│
-├── Modos/
+├── Modos/                      # Subgéneros de videojuego
 │   ├── battleroyale.py
 │   ├── moba.py
 │   ├── shooter.py
 │   ├── lucha.py
 │   └── deportes.py
 │
-└── Eliminaciones/
-    ├── bracketeliminacion.py
-    ├── eliminaciondirecta.py
-    ├── dobleeliminacion.py
-    └── roundrobin.py
+├── Eliminaciones/              # Formatos de bracket
+│   ├── bracketeliminacion.py
+│   ├── eliminaciondirecta.py
+│   ├── dobleeliminacion.py
+│   └── roundrobin.py
+│
+└── Principal/
+    ├── eSports.py              # Punto de entrada: ejecutable principal
+    │
+    ├── Entidades/              # Clases del dominio del torneo
+    │   ├── juego.py
+    │   ├── jugador.py
+    │   ├── equipo.py
+    │   ├── torneo.py
+    │   ├── bracket.py
+    │   ├── fase.py
+    │   ├── partida.py
+    │   └── resultado.py
+    │
+    ├── Errores/                # Excepciones personalizadas y manejador
+    │   ├── errores.py
+    │   └── manejo_errores.py
+    │
+    └── Datos/                  # Base de datos y generación aleatoria
+        ├── generador_aleatorio.py
+        ├── crear_ficheros.py
+        ├── jugadores.pickle
+        └── equipos.pickle
 ```
 
 ---

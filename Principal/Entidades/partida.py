@@ -1,5 +1,5 @@
 #Partida del torneo
-from Principal.resultado import Resultado
+from Principal.Entidades.resultado import Resultado
 
 class Partida:
     def __init__(self, equipo1, equipo2):

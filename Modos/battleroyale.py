@@ -1,4 +1,4 @@
-from Principal.juego import Juego
+from Principal.Entidades.juego import Juego
 
 class BattleRoyale(Juego):
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo, num_jugadores: int, tiempo_partida: int, mapas: list):

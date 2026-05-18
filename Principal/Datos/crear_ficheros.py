@@ -1,4 +1,7 @@
 import pickle
+import os
+
+BASE_DIR = os.path.dirname(__file__)
 
 # Base de datos de jugadores de eSports conocidos
 # Formato: (nick, nombre, apellidos, edad, pais)
@@ -189,12 +192,11 @@ equipos_data = [
     ("Endpoint", "Europa"),
 ]
 
-# Creamos el fichero de jugadores
-with open('jugadores.pickle', 'wb') as f:
+# Escribimos los datos en los ficheros binarios
+with open(os.path.join(BASE_DIR, 'jugadores.pickle'), 'wb') as f:
     pickle.dump(jugadores_data, f)
 
-# Creamos el fichero de equipos
-with open('equipos.pickle', 'wb') as f:
+with open(os.path.join(BASE_DIR, 'equipos.pickle'), 'wb') as f:
     pickle.dump(equipos_data, f)
 
 print("Ficheros creados correctamente: jugadores.pickle y equipos.pickle")

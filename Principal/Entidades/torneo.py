@@ -1,5 +1,5 @@
-from Principal.juego import Juego
-from Principal.bracket import Bracket
+from Principal.Entidades.juego import Juego
+from Principal.Entidades.bracket import Bracket
 
 class Torneo:
     def __init__(self, nombre: str, juego: Juego, bracket: Bracket):

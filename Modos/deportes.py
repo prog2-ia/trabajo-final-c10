@@ -1,4 +1,4 @@
-from Principal.juego import Juego
+from Principal.Entidades.juego import Juego
 
 class Deportes(Juego):
     def __init__(self, nombre, cod, desarrollador, tamanyo_equipo):

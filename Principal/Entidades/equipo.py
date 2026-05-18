@@ -23,6 +23,9 @@ class Equipo:
             return False
         return self.nombre == otro.nombre
 
+    def __hash__(self):
+        return hash(self.nombre)
+
     def __lt__(self, otro):
         # Permite ordenar equipos por ranking (menor ranking = mejor posición)
         return self.__ranking < otro.__ranking

@@ -1,6 +1,6 @@
 # Clase bracket eliminacion-> se divide en directa y doble
 
-from Principal import bracket as b
+from Principal.Entidades import bracket as b
 
 
 class BracketEliminacion(b.Bracket):

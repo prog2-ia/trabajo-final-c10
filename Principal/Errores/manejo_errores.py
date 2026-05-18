@@ -1,16 +1,16 @@
 #En este archivo, vamos a pillar los errores y vamos a intentar ver que hacemos  con ellos
-from Principal.errores import OpcionInvalidaError
-from Principal.errores import EquiposInsuficientesError
-from Principal.errores import TorneoError
-from Principal.errores import EquiposImpares
-from Principal.errores import TamanoEquipoError
-from Principal.errores import NombreVacioError
-from Principal.errores import PuntuacionNegativaError
-from Principal.errores import EmpateNoPermitidoError
-from Principal.errores import IndiceImparError
-from Principal.errores import BracketTipoError
-from Principal.errores import FaseFinInvalidaError
-from Principal.errores import JugadoresInsuficientesError
+from Principal.Errores.errores import OpcionInvalidaError
+from Principal.Errores.errores import EquiposInsuficientesError
+from Principal.Errores.errores import TorneoError
+from Principal.Errores.errores import EquiposImpares
+from Principal.Errores.errores import TamanoEquipoError
+from Principal.Errores.errores import NombreVacioError
+from Principal.Errores.errores import PuntuacionNegativaError
+from Principal.Errores.errores import EmpateNoPermitidoError
+from Principal.Errores.errores import IndiceImparError
+from Principal.Errores.errores import BracketTipoError
+from Principal.Errores.errores import FaseFinInvalidaError
+from Principal.Errores.errores import JugadoresInsuficientesError
 
 
 def registrar_error(error):
