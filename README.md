@@ -32,7 +32,7 @@ trabajo-final-c10/
 │   └── roundrobin.py
 │
 └── Principal/
-    ├── eSports.py              # Punto de entrada: ejecutable principal
+    ├── main.py              # Punto de entrada: ejecutable principal
     │
     ├── Entidades/              # Clases del dominio del torneo
     │   ├── juego.py
@@ -70,7 +70,7 @@ cd trabajo-final-c10
 python Principal/crear_ficheros.py
 
 # 3. Ejecuta el programa
-python Principal/eSports.py
+python Principal/mainmain.py
 ```
 
 > Los ficheros `jugadores.pickle` y `equipos.pickle` ya están incluidos en el repositorio, por lo que el paso 2 solo es necesario si los eliminas o quieres regenerarlos.
