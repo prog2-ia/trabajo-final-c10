@@ -81,6 +81,13 @@ python main.py
 > Los ficheros `jugadores.pickle` y `equipos.pickle` ya están incluidos en el repositorio, por lo que el paso 2 solo es necesario si los eliminas o quieres regenerarlos.
 
 ---
+### Ejecutable Linux
+
+Si no tienes Python instalado, puedes ejecutar directamente el binario incluido en la raíz del repositorio:
+
+```bash
+./main
+```
 
 ## Flujo de uso
 
