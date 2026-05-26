@@ -1,0 +1,30 @@
+name: Build Linux Executable
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller -F main.py
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: ejecutable-linux
+          path: dist/main
