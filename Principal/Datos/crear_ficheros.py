@@ -1,7 +1,11 @@
 import pickle
 import os
+import sys
 
-BASE_DIR = os.path.dirname(__file__)
+if getattr(sys, 'frozen', False):
+    BASE_DIR = sys._MEIPASS
+else:
+    BASE_DIR = os.path.dirname(__file__)
 
 # Base de datos de jugadores de eSports conocidos
 # Formato: (nick, nombre, apellidos, edad, pais)

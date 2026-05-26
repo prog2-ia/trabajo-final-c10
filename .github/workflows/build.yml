@@ -21,7 +21,7 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build executable
-        run: pyinstaller -F main.py
+        run: pyinstaller -F --add-data "Principal/Datos/jugadores.pickle:." --add-data "Principal/Datos/equipos.pickle:." main.py
 
       - name: Upload executable
         uses: actions/upload-artifact@v4

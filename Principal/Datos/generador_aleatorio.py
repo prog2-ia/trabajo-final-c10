@@ -1,12 +1,17 @@
 import pickle
 import random
 import os
+import sys
 from Principal.Entidades.equipo import Equipo
 from Principal.Entidades.jugador import Jugador
 from Principal.Errores.errores import JugadoresInsuficientesError, EquiposInsuficientesError
 from Principal.Errores.manejo_errores import registrar_error
 
-BASE_DIR = os.path.dirname(__file__)
+
+if getattr(sys, 'frozen', False):
+    BASE_DIR = sys._MEIPASS
+else:
+    BASE_DIR = os.path.dirname(__file__)
 
 
 class GeneradorAleatorio:
