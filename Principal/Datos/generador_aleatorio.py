@@ -13,9 +13,9 @@ class GeneradorAleatorio:
     def __init__(self, num_equipos: int, tamanyo_equipo: int):
         self.__num_equipos = num_equipos
         self.__tamanyo_equipo = tamanyo_equipo
-        self.__jugadores_disponibles = []
-        self.__equipos_disponibles = []
-        self.__equipos_generados = []
+        self.__jugadores_disponibles: list[Jugador] = []
+        self.__equipos_disponibles: list[tuple[str, str]] = []
+        self.__equipos_generados: list[Equipo] = []
 
         self.__cargar_datos()
 

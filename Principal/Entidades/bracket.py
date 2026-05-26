@@ -1,11 +1,11 @@
 #Clase abstracta bracket
-
+from Principal.Entidades.fase import Fase
 from abc import ABC,abstractmethod
 
 class Bracket(ABC):
     def __init__(self,equipos:list):
         self._equipos=equipos
-        self._fases=[]
+        self._fases: list[Fase] = []
 
     @abstractmethod
     def gen_bracket(self):
