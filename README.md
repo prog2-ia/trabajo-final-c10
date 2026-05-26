@@ -1,15 +1,17 @@
 # Gestor de Torneos eSports
 
-Sistema de gestión de torneos competitivos desarrollado en Python como proyecto universitario de **Programación Orientada a Objetos**. Permite organizar torneos completos para distintos géneros de videojuegos, con soporte para múltiples formatos de bracket y generación automática de equipos.
+Sistema de gestión de torneos competitivos desarrollado en Python. Permite organizar torneos completos para distintos géneros de videojuegos, con soporte para múltiples formatos de bracket, generación automática de equipos y exportación del resumen del torneo a fichero de texto.
 
 ---
 
 ## Características
 
--  **5 géneros de videojuego** — Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
--  **3 formatos de torneo** — Eliminación Directa, Doble Eliminación y Round Robin
--  **Creación de equipos** manual o aleatoria desde una base de datos de jugadores y equipos reales de eSports
--  **Seguimiento en tiempo real** del torneo con nombres de ronda automáticos (Final, Semifinal, Round of 16...)
+- **5 géneros de videojuego**: Battle Royale, MOBA, Shooter, Lucha y Deportes, cada uno con sus propias reglas y formatos válidos
+- **3 formatos de torneo**: Eliminación Directa, Doble Eliminación y Round Robin
+- **Creación de equipos** manual o aleatoria desde una base de datos de jugadores y equipos reales de eSports
+- **Seguimiento en tiempo real** del torneo con nombres de ronda automáticos (Final, Semifinal, Round of 16...)
+- **Exportación a fichero txt**: opción de guardar un resumen completo del torneo al terminar
+- **Control de errores** centralizado con excepciones personalizadas para entradas inválidas
 
 ---
 
@@ -49,11 +51,13 @@ trabajo-final-c10/
     │   ├── errores.py
     │   └── manejo_errores.py
     │
-    └── Datos/                  # Base de datos y generación aleatoria
+    └── Datos/                  # Base de datos, generación aleatoria y exportación
         ├── generador_aleatorio.py
+        ├── generador_txt.py
         ├── crear_ficheros.py
         ├── jugadores.pickle
-        └── equipos.pickle
+        ├── equipos.pickle
+        └── Resumenes/          # Carpeta generada automáticamente con los ficheros txt
 ```
 
 ---
@@ -89,13 +93,15 @@ python main.py
         ↓
 4. Crea los equipos manualmente o genéralos de forma aleatoria
         ↓
-5. El torneo arranca — se muestran los enfrentamientos ronda a ronda
+5. Elige si exportar el torneo a txt.
         ↓
-6. Introduce los resultados de cada partida
+6. El torneo arranca: se muestran los enfrentamientos ronda a ronda
         ↓
-7. Al final de cada partida puedes consultar el estado del torneo
+7. Introduce los resultados de cada partida
         ↓
-8. El torneo termina mostrando el campeón o la clasificación final
+8. Al final de cada partida puedes consultar el estado del torneo
+        ↓
+9. El torneo termina mostrando el campeón o la clasificación final
 ```
 ## Autores
 

@@ -50,3 +50,7 @@ class RoundRobin(Bracket):
         print("CLASIFICACIÓN:")
         for eq, puntos in clasificacion:
             print(eq.nombre, "-", puntos, "puntos")
+
+    def get_clasificacion(self) -> list:
+        # Devuelve la clasificación ordenada como lista de tuplas (equipo, puntos)
+        return sorted(self.__tabla.items(), key=lambda x: x[1], reverse=True)

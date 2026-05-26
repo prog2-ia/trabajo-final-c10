@@ -12,6 +12,7 @@ from Eliminaciones.eliminaciondirecta import EliminacionDirecta
 from Eliminaciones.dobleeliminacion import DobleEliminacion
 from Eliminaciones.roundrobin import RoundRobin
 from Principal.Datos.generador_aleatorio import GeneradorAleatorio
+from Principal.Datos.generador_txt import GeneradorTxt
 from Principal.Entidades.fase import Fase
 from Principal.Entidades.partida import Partida
 
@@ -290,6 +291,11 @@ if __name__ == "__main__":
     torneo.iniciar()
     torneo.mostrar_estado()
 
+    guardar = input("\n¿Quieres guardar un resumen del torneo en un fichero txt? (s/n): ").strip().lower()
+    resumen = GeneradorTxt(nombre_torneo, juego, formato) if guardar == 's' else None
+    if resumen:
+        resumen.escribir_equipos(equipos)
+
     # ─────────────────────────────────────────
     # BUCLE PRINCIPAL DE EJECUCIÓN DEL TORNEO
     # ─────────────────────────────────────────
@@ -298,7 +304,19 @@ if __name__ == "__main__":
 
     while torneo_activo:
 
-        fase_actual = torneo.bracket._fases[-1]
+        # En round robin cogemos la primera fase incompleta en orden
+        # En eliminación directa y doble eliminación cogemos la última
+        if formato == 'round_robin':
+            fase_actual = None
+            for f in torneo.bracket._fases:
+                if not f.esta_completa():
+                    fase_actual = f
+                    break
+            if fase_actual is None:
+                torneo_activo = False
+                continue
+        else:
+            fase_actual = torneo.bracket._fases[-1]
 
         # Filtramos las partidas que aún no tienen resultado
         partidas_pendientes = [p for p in fase_actual.partidas if p.resultado is None]
@@ -324,25 +342,15 @@ if __name__ == "__main__":
                     partidas_pendientes = [p for p in fase_actual.partidas if p.resultado is None]
                     partida = partidas_pendientes[0]
                     mostrar_enfrentamiento(partida, fase_actual, formato)
+                    if resumen:
+                        resumen.escribir_nueva_ronda(nombre_ronda(fase_actual, formato))
                     pedir_resultado(partida, juego)
+                    if resumen:
+                        resumen.escribir_resultado_partida(partida, nombre_ronda(fase_actual, formato))
                     ver_estado = input("\n  ¿Ver estado del torneo? (s/n): ").strip().lower()
                     if ver_estado == 's':
                         torneo.mostrar_estado()
                     continue
-
-                # Todas las fases completas — procesamos la siguiente
-                torneo.bracket.procesar_fase()
-
-                nueva_fase = torneo.bracket._fases[-1]
-                if len(nueva_fase.partidas) == 1:
-                    print(f"\n{'=' * 45}")
-                    print(f"  GRAN FINAL")
-                    print(f"{'=' * 45}")
-                else:
-                    print(f"\n{'=' * 45}")
-                    print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
-                    print(f"{'=' * 45}")
-                continue
 
                 # Todas las fases activas están completas — procesamos la siguiente
                 torneo.bracket.procesar_fase()
@@ -353,6 +361,8 @@ if __name__ == "__main__":
                     print(f"\n{'=' * 45}")
                     print(f"  GRAN FINAL")
                     print(f"{'=' * 45}")
+                    if resumen:
+                        resumen.escribir_nueva_ronda("GRAN FINAL")
                 else:
                     print(f"\n{'=' * 45}")
                     print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
@@ -390,6 +400,8 @@ if __name__ == "__main__":
             print(f"\n{'='*45}")
             print(f"  NUEVA RONDA: {nombre_ronda(nueva_fase, formato)}")
             print(f"{'='*45}")
+            if resumen:
+                resumen.escribir_nueva_ronda(nombre_ronda(nueva_fase, formato))
             continue
 
         # Jugamos la siguiente partida pendiente
@@ -399,6 +411,9 @@ if __name__ == "__main__":
         # Controlar puntuaciones negativas
         # Controlar empate si el juego no permite_empate()
         pedir_resultado(partida, juego)
+
+        if resumen:
+            resumen.escribir_resultado_partida(partida, nombre_ronda(fase_actual, formato))
 
         # Tras cada partida preguntamos si quiere ver el estado del torneo
         ver_estado = input("\n  ¿Ver estado del torneo? (s/n): ").strip().lower()
@@ -422,6 +437,8 @@ if __name__ == "__main__":
                     f"Se esperaba RoundRobin pero se encontró {type(torneo.bracket).__name__}.")
             torneo.bracket.actualizar_tabla()
             torneo.bracket.mostrar_clasificacion()
+            if resumen:
+                resumen.escribir_clasificacion_rr(torneo.bracket)
         except BracketTipoError as e:
             registrar_error(e)
     else:
@@ -434,6 +451,8 @@ if __name__ == "__main__":
                     f"La fase final debería tener exactamente 1 partida con resultado.")
             campeon = ultima_fase.partidas[0].ganador()
             print(f"\n  CAMPEÓN: {campeon.nombre}")
+            if resumen:
+                resumen.escribir_campeon(campeon)
         except FaseFinInvalidaError as e:
             registrar_error(e)
 
