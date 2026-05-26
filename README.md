@@ -18,6 +18,8 @@ Sistema de gestión de torneos competitivos desarrollado en Python como proyecto
 ```
 trabajo-final-c10/
 │
+├── main.py                     # Punto de entrada: ejecutable principal
+│
 ├── Modos/                      # Subgéneros de videojuego
 │   ├── battleroyale.py
 │   ├── moba.py
@@ -32,7 +34,6 @@ trabajo-final-c10/
 │   └── roundrobin.py
 │
 └── Principal/
-    ├── main.py              # Punto de entrada: ejecutable principal
     │
     ├── Entidades/              # Clases del dominio del torneo
     │   ├── juego.py
@@ -67,10 +68,10 @@ git clone https://github.com/jorgesancere/trabajo-final-c10.git
 cd trabajo-final-c10
 
 # 2. (Solo la primera vez) Genera los ficheros de la base de datos
-python Principal/crear_ficheros.py
+python Principal/Datos/crear_ficheros.py
 
 # 3. Ejecuta el programa
-python Principal/mainmain.py
+python main.py
 ```
 
 > Los ficheros `jugadores.pickle` y `equipos.pickle` ya están incluidos en el repositorio, por lo que el paso 2 solo es necesario si los eliminas o quieres regenerarlos.
